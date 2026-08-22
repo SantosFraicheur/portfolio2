@@ -77,7 +77,7 @@ export default function Home() {
   }, []);
 
   const copyEmail = async () => {
-    await navigator.clipboard?.writeText("bonjour@votrenom.fr");
+    await navigator.clipboard?.writeText("sergemetchri@gmail.com");
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1800);
   };
@@ -89,15 +89,15 @@ export default function Home() {
       <aside className="side-rail">
         <a href="#top" className="brand-lockup" aria-label="Retour en haut">
           <img src={ASSETS.mark} alt="" className="brand-mark" />
-          <span className="brand-name">Lumière<br />/ Studio</span>
+          <span className="brand-name">Metchri<br />/ Studio</span>
         </a>
         <span className="rail-index">Portfolio · 2026</span>
-        <a className="rail-email" href="mailto:bonjour@votrenom.fr">bonjour@<br />votrenom.fr</a>
+        <a className="rail-email" href="mailto:sergemetchri@gmail.com">sergemetchri@<br />gmail.com</a>
       </aside>
 
       <div className="page-content" id="top">
         <header className="topbar">
-          <a href="#top" className="mobile-brand"><img src={ASSETS.mark} alt="" /> <span>Lumière / Studio</span></a>
+          <a href="#top" className="mobile-brand"><img src={ASSETS.mark} alt="" /> <span>Metchri / Studio</span></a>
           <nav className={`main-nav ${menuOpen ? "open" : ""}`} aria-label="Navigation principale">
             <a href="#work" onClick={closeMenu}>Projets <span>01</span></a>
             <a href="#approach" onClick={closeMenu}>Approche <span>02</span></a>
@@ -111,9 +111,9 @@ export default function Home() {
 
         <section className="hero-section" aria-labelledby="hero-title">
           <div className="hero-copy" data-reveal>
-            <p className="eyebrow"><span className="eyebrow-line" /> Développeur · créateur numérique</p>
+            <p className="eyebrow"><span className="eyebrow-line" /> METCHRI Jérôme Serge · étudiant MIA 2</p>
             <h1 id="hero-title">Des interfaces qui<br /><em>savent</em> pourquoi<br />elles existent.</h1>
-            <p className="hero-intro">Je conçois et construis des expériences numériques où la direction artistique, la clarté produit et la fiabilité technique avancent ensemble.</p>
+            <p className="hero-intro">Je suis METCHRI Jérôme Serge, étudiant en MIA 2 à l’UAC au Bénin. Je conçois et construis des expériences numériques où la direction artistique, la clarté produit et la fiabilité technique avancent ensemble.</p>
             <a href="#work" className="text-link">Voir les projets <ArrowDownRight size={17} /></a>
           </div>
           <div className="hero-visual" data-reveal>
@@ -180,11 +180,11 @@ export default function Home() {
         <section className="contact-section" id="contact" data-reveal>
           <div className="contact-top"><p className="eyebrow"><span className="eyebrow-line" /> Parlons de la suite</p><span className="contact-counter">04—04</span></div>
           <h2>Un projet à<br /><em>mettre au monde ?</em></h2>
-          <p className="contact-intro">Un produit, une refonte ou une idée encore en notes. Écrivez-moi ce que vous cherchez à rendre plus clair, plus beau ou plus fiable.</p>
-          <div className="contact-actions"><a className="contact-button" href="mailto:bonjour@votrenom.fr">Écrire un message <Mail size={17} /></a><button className="copy-button" onClick={copyEmail}>{copied ? <><Check size={16} /> Adresse copiée</> : <><Copy size={16} /> Copier l’adresse</>}</button></div>
+          <p className="contact-intro">Un produit, une refonte ou une idée encore en notes. Écrivez-moi ce que vous cherchez à rendre plus clair, plus beau ou plus fiable. Je suis joignable par e-mail ou sur WhatsApp.</p>
+          <div className="contact-actions"><a className="contact-button" href="mailto:sergemetchri@gmail.com">Écrire un message <Mail size={17} /></a><a className="whatsapp-button" href="https://wa.me/2290195162664" target="_blank" rel="noreferrer">WhatsApp · 0195162664 <ExternalLink size={16} /></a><button className="copy-button" onClick={copyEmail}>{copied ? <><Check size={16} /> Adresse copiée</> : <><Copy size={16} /> Copier l’adresse</>}</button></div>
         </section>
 
-        <footer className="site-footer"><span>© 2026 — Lumière / Studio</span><span>Conçu et construit avec attention</span><a href="#top">Retour en haut <ArrowUpRight size={14} /></a></footer>
+        <footer className="site-footer"><span>© 2026 — METCHRI Jérôme Serge</span><span>Conçu et construit avec attention</span><a href="#top">Retour en haut <ArrowUpRight size={14} /></a></footer>
       </div>
     </main>
   );
