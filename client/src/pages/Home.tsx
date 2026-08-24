@@ -1,191 +1,196 @@
-// Atelier éditorial — page portfolio : asymétrie calme, preuves de travail, vert laurier #587A68.
-import { useEffect, useMemo, useState } from "react";
+// MKS Service — interface de présentation et tableau d’architecture métier. Frontend de démonstration sans API persistante.
+import { useMemo, useState } from "react";
 import {
-  ArrowDownRight,
-  ArrowUpRight,
+  ArrowRight,
+  BarChart3,
+  Bell,
+  BriefcaseBusiness,
+  Building2,
   Check,
-  Copy,
-  ExternalLink,
-  Mail,
+  ChevronDown,
+  ChevronRight,
+  CircleDollarSign,
+  ClipboardCheck,
+  FileText,
+  HardHat,
+  Headphones,
+  Landmark,
+  LockKeyhole,
   Menu,
+  MessageSquare,
+  Network,
+  ShieldCheck,
+  Users,
+  WalletCards,
   X,
 } from "lucide-react";
 
-const ASSETS = {
-  hero: "/manus-storage/portfolio-hero-editorial_b042cab1.jpg",
-  lumiere: "/manus-storage/project-lumiere-parfums_4df234e3.jpg",
-  commerce: "/manus-storage/project-commerce-interface_0798988f.jpg",
-  automation: "/manus-storage/project-automation-studio_ef985700.jpg",
-  mark: "/manus-storage/laurel-mark_229594d0.png",
-};
-
-type Project = {
+type Domain = {
   id: string;
-  number: string;
+  label: string;
+  kicker: string;
   title: string;
-  category: string;
-  year: string;
   description: string;
-  image: string;
-  tags: string[];
-  status: "réalisé" | "à compléter";
-  featured?: boolean;
+  color: string;
+  icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
+  items: string[];
 };
 
-const projects: Project[] = [
+const domains: Domain[] = [
   {
-    id: "lumiere-parfums",
-    number: "01",
-    title: "Lumière Parfums",
-    category: "E-commerce / direction technique",
-    year: "2026",
-    description:
-      "Une expérience de parfumerie premium pensée de la vitrine jusqu’au socle applicatif : narration produit, panier, espace client, administration et déploiement.",
-    image: ASSETS.lumiere,
-    tags: ["Node.js", "Express", "PostgreSQL", "Cloudinary"],
-    status: "réalisé",
-    featured: true,
+    id: "public",
+    label: "01 · Site principal",
+    kicker: "Espace public & commercial",
+    title: "Présenter, qualifier, convertir.",
+    description: "Le point d’entrée de MKS Service : une présence claire, des services lisibles et un parcours de demande sans friction.",
+    color: "blue",
+    icon: Building2,
+    items: ["Découverte de l’entreprise", "Services proposés", "Demande de devis", "Actualités & informations", "Contact direct"],
   },
-  // Ajoutez ici les prochaines études de cas en conservant le même format.
+  {
+    id: "client",
+    label: "02 · Espace client",
+    kicker: "Relation & suivi",
+    title: "Chaque demande reste lisible.",
+    description: "Un espace pour suivre les devis, les échanges, les commandes, les paiements et l’historique de chaque dossier.",
+    color: "cyan",
+    icon: Headphones,
+    items: ["Compte & connexion", "Suivi des demandes", "Devis & factures", "Messages en ligne", "Commandes & paiements"],
+  },
+  {
+    id: "rh",
+    label: "03 · Plateforme RH",
+    kicker: "Ressources humaines",
+    title: "Les équipes avancent ensemble.",
+    description: "Contrats, présences, congés, évaluations, formations et affectations réunis dans un même environnement.",
+    color: "green",
+    icon: Users,
+    items: ["Gestion des employés", "Contrats & documents", "Paie & rémunérations", "Présences & congés", "Planning & affectations"],
+  },
+  {
+    id: "finance",
+    label: "04 · Gestion financière",
+    kicker: "Entrées, sorties & trésorerie",
+    title: "Décider avec les bons chiffres.",
+    description: "Une vue consolidée des mouvements, des comptes, des prévisions et des rapports financiers de MKS Service.",
+    color: "orange",
+    icon: CircleDollarSign,
+    items: ["Entrées de fonds", "Sorties de fonds", "Mouvements de caisse", "Rapprochements bancaires", "Prévisions de trésorerie"],
+  },
+  {
+    id: "employee",
+    label: "05 · Espace employé",
+    kicker: "Travail individuel & missions",
+    title: "Savoir ce qui vient ensuite.",
+    description: "Profil, disponibilités, tâches, état d’avancement et rapports de travail, au même endroit.",
+    color: "purple",
+    icon: BriefcaseBusiness,
+    items: ["Profil & informations", "Disponibilités", "Tâches & missions", "État du travail", "Rapports & documents"],
+  },
+  {
+    id: "admin",
+    label: "06 · Administration",
+    kicker: "Vue globale & contrôle",
+    title: "Un cockpit pour décider.",
+    description: "L’admin principal supervise les domaines, les mouvements, les permissions, les alertes et la performance globale.",
+    color: "navy",
+    icon: ShieldCheck,
+    items: ["Vue globale en temps réel", "Gestion des rôles", "Audit & traçabilité", "Paramètres système", "Rapports consolidés"],
+  },
 ];
 
-const expertise = [
-  ["01", "Interfaces utiles", "Des parcours lisibles, sensibles et suffisamment robustes pour sortir du prototype."],
-  ["02", "Systèmes fiables", "Une attention égale au frontend, aux données, aux secrets et au déploiement."],
-  ["03", "Présence de marque", "Des détails visuels qui donnent à un produit sa voix, sa mémoire et sa cohérence."],
+const flow = [
+  ["01", "Demande", "Le client décrit son besoin."],
+  ["02", "Devis", "Le service reçoit et prépare une proposition."],
+  ["03", "Discussion", "Les équipes clarifient les attentes."],
+  ["04", "Confirmation", "Le projet ou la commande est validé."],
+  ["05", "Planification", "Les ressources et le calendrier sont affectés."],
+  ["06", "Réalisation", "Les employés exécutent et documentent le travail."],
+  ["07", "Validation", "Le responsable vérifie le résultat."],
+  ["08", "Paiement", "La facturation et l’historique sont enregistrés."],
+];
+
+const kpis = [
+  ["6", "domaines connectés", "Une organisation lisible"],
+  ["1", "vue consolidée", "Des décisions plus rapides"],
+  ["24/7", "traçabilité", "Chaque action a son contexte"],
 ];
 
 export default function Home() {
-  const [activeFilter, setActiveFilter] = useState("Tous");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const filters = ["Tous", "Réalisé"];
+  const [activeDomain, setActiveDomain] = useState("admin");
+  const [expanded, setExpanded] = useState<string | null>("admin");
+  const selectedDomain = useMemo(() => domains.find((domain) => domain.id === activeDomain) ?? domains[0], [activeDomain]);
 
-  const filteredProjects = useMemo(() => {
-    if (activeFilter === "Tous") return projects;
-    return projects.filter((project) => project.status === "réalisé");
-  }, [activeFilter]);
-
-  useEffect(() => {
-    const revealItems = document.querySelectorAll<HTMLElement>("[data-reveal]");
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
-      { threshold: 0.12 },
-    );
-    revealItems.forEach((item) => observer.observe(item));
-    return () => observer.disconnect();
-  }, []);
-
-  const copyEmail = async () => {
-    await navigator.clipboard?.writeText("sergemetchri@gmail.com");
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
+  const jump = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setMenuOpen(false);
   };
 
-  const closeMenu = () => setMenuOpen(false);
-
   return (
-    <main className="site-shell">
-      <aside className="side-rail">
-        <a href="#top" className="brand-lockup" aria-label="Retour en haut">
-          <img src={ASSETS.mark} alt="" className="brand-mark" />
-          <span className="brand-name">Metchri<br />/ Studio</span>
+    <main className="mks-app">
+      <header className="mks-header">
+        <a className="mks-brand" href="#top" onClick={() => jump("top")}>
+          <span className="mks-mark"><span>M</span><span>K</span><span>S</span></span>
+          <span><strong>MKS</strong><small>SERVICE</small></span>
         </a>
-        <span className="rail-index">Portfolio · 2026</span>
-        <a className="rail-email" href="mailto:sergemetchri@gmail.com">sergemetchri@<br />gmail.com</a>
-      </aside>
+        <button className="mks-mobile-toggle" onClick={() => setMenuOpen((value) => !value)} aria-label="Menu">{menuOpen ? <X /> : <Menu />}</button>
+        <nav className={`mks-nav ${menuOpen ? "is-open" : ""}`}>
+          <button onClick={() => jump("architecture")}>Architecture</button>
+          <button onClick={() => jump("domains")}>Espaces métier</button>
+          <button onClick={() => jump("flow")}>Processus</button>
+          <button onClick={() => jump("security")}>Sécurité</button>
+        </nav>
+        <a className="mks-header-cta" href="mailto:mkservicegroupe23@gmail.com">Demander une présentation <ArrowRight size={16} /></a>
+      </header>
 
-      <div className="page-content" id="top">
-        <header className="topbar">
-          <a href="#top" className="mobile-brand"><img src={ASSETS.mark} alt="" /> <span>Metchri / Studio</span></a>
-          <nav className={`main-nav ${menuOpen ? "open" : ""}`} aria-label="Navigation principale">
-            <a href="#work" onClick={closeMenu}>Projets <span>01</span></a>
-            <a href="#approach" onClick={closeMenu}>Approche <span>02</span></a>
-            <a href="#contact" onClick={closeMenu}>Contact <span>03</span></a>
-          </nav>
-          <a className="top-availability" href="#contact">Disponible pour un projet <span className="availability-dot" /></a>
-          <button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}>
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </header>
+      <section className="mks-hero" id="top">
+        <div className="hero-grid-lines" />
+        <div className="hero-copy">
+          <div className="mks-eyebrow"><span /> Architecture digitale · MKS Service</div>
+          <h1>Une seule<br /><em>vision.</em><br />Tous les métiers.</h1>
+          <p>Un écosystème connecté pour piloter les demandes, les équipes, les finances et la réalisation des projets — avec une transparence totale.</p>
+          <div className="hero-actions"><button className="primary-btn" onClick={() => jump("architecture")}>Explorer l’architecture <ArrowRight size={17} /></button><button className="text-btn" onClick={() => jump("domains")}>Voir les espaces <ChevronDown size={16} /></button></div>
+          <div className="hero-proof"><ShieldCheck size={17} /><span>Contrôle par rôles</span><span className="proof-separator">·</span><LockKeyhole size={15} /><span>Échanges sécurisés</span></div>
+        </div>
+        <div className="hero-diagram" aria-label="Résumé visuel de l’architecture MKS Service">
+          <div className="diagram-orbit orbit-a" /><div className="diagram-orbit orbit-b" />
+          <div className="diagram-center"><span className="center-symbol">MKS</span><small>CORE</small><div className="center-status"><span /> Système connecté</div></div>
+          <div className="diagram-node node-public"><Building2 size={18} /><span>Site principal</span></div>
+          <div className="diagram-node node-rh"><Users size={18} /><span>RH</span></div>
+          <div className="diagram-node node-finance"><CircleDollarSign size={18} /><span>Finance</span></div>
+          <div className="diagram-node node-admin"><ShieldCheck size={18} /><span>Admin</span></div>
+          <div className="diagram-tag">Architecture 01<br /><strong>Vue globale</strong></div>
+        </div>
+      </section>
 
-        <section className="hero-section" aria-labelledby="hero-title">
-          <div className="hero-copy" data-reveal>
-            <p className="eyebrow"><span className="eyebrow-line" /> METCHRI Jérôme Serge · étudiant MIA 2</p>
-            <h1 id="hero-title">Des interfaces qui<br /><em>savent</em> pourquoi<br />elles existent.</h1>
-            <p className="hero-intro">Je suis METCHRI Jérôme Serge, étudiant en MIA 2 à l’UAC au Bénin. Je conçois et construis des expériences numériques où la direction artistique, la clarté produit et la fiabilité technique avancent ensemble.</p>
-            <a href="#work" className="text-link">Voir les projets <ArrowDownRight size={17} /></a>
-          </div>
-          <div className="hero-visual" data-reveal>
-            <div className="hero-image-wrap">
-              <img src={ASSETS.hero} alt="Bureau de création avec ordinateur, papier et branche de laurier" />
-              <span className="image-note note-top">Fig. 01 / atelier en cours</span>
-              <span className="image-note note-bottom">Concevoir avec intention</span>
-            </div>
-            <div className="hero-stamp"><img src={ASSETS.mark} alt="" /><span>↘</span></div>
-          </div>
-          <div className="hero-footer"><span>Scroll pour explorer</span><span className="scroll-line" /><span>01—04</span></div>
-        </section>
+      <section className="mks-intro" id="architecture">
+        <div className="section-index">01 <span /></div>
+        <div><div className="mks-eyebrow">Une architecture, plusieurs portes d’entrée</div><h2>Le même niveau<br />de clarté <em>partout.</em></h2></div>
+        <div className="intro-side"><p>MKS Service relie le site commercial, les ressources humaines, la finance et les opérations autour d’un langage commun : la demande, la réalisation, la validation et la trace.</p><div className="mini-signature"><span>Conçu pour</span><strong>Grandir sans perdre le fil.</strong></div></div>
+      </section>
 
-        <section className="manifesto-section" id="approach" data-reveal>
-          <div className="section-marker"><span>02</span><span className="marker-rule" /></div>
-          <div className="manifesto-content">
-            <p className="eyebrow">Une pratique située entre le code et l’intention</p>
-            <h2>Le bon détail n’est<br /><em>jamais</em> un hasard.</h2>
-          </div>
-          <p className="manifesto-aside">Chaque projet commence par une question simple : quelle expérience doit rester en mémoire lorsque l’écran s’éteint ? La réponse devient une structure, puis une interface.</p>
-        </section>
+      <section className="kpi-strip">{kpis.map(([value, label, note]) => <div className="kpi" key={label}><strong>{value}</strong><span>{label}</span><small>{note}</small></div>)}</section>
 
-        <section className="work-section" id="work" aria-labelledby="work-title">
-          <div className="section-heading" data-reveal>
-            <div><p className="eyebrow"><span className="eyebrow-line" /> Sélection de travaux</p><h2 id="work-title">Projets<br /><em>réalisés</em></h2></div>
-            <div className="section-heading-meta"><span>Une archive en mouvement</span><span>01 entrée publiée</span></div>
-          </div>
-          <div className="filter-row" role="tablist" aria-label="Filtrer les projets">
-            {filters.map((filter) => <button key={filter} className={activeFilter === filter ? "filter active" : "filter"} onClick={() => setActiveFilter(filter)} role="tab" aria-selected={activeFilter === filter}>{filter}</button>)}
-          </div>
-          <div className="project-list">
-            {filteredProjects.map((project, index) => (
-              <article className={`project-row ${project.featured ? "featured" : ""}`} key={project.id} data-reveal style={{ "--delay": `${index * 70}ms` } as React.CSSProperties}>
-                <div className="project-number">{project.number}</div>
-                <div className="project-image-wrap"><img src={project.image} alt={`Aperçu éditorial du projet ${project.title}`} /><span className={`project-status ${project.status === "réalisé" ? "status-done" : "status-pending"}`}>{project.status}</span></div>
-                <div className="project-info">
-                  <div className="project-title-line"><h3>{project.title}</h3><span className="project-year">{project.year}</span></div>
-                  <p className="project-category">{project.category}</p>
-                  <p className="project-description">{project.description}</p>
-                  <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
-                </div>
-                <a className="project-arrow" href={project.featured ? "#lumiere-detail" : "#contact"} aria-label={project.featured ? `Voir les détails de ${project.title}` : "Proposer un projet"}><ArrowUpRight size={22} /></a>
-              </article>
-            ))}
-          </div>
-        </section>
+      <section className="domains-section" id="domains">
+        <div className="section-heading-row"><div><div className="mks-eyebrow">02 · Les plateformes connectées</div><h2>Chaque domaine a<br /><em>sa propre vue.</em></h2></div><p>Choisissez un espace pour afficher ses responsabilités et ses fonctions dans l’architecture globale.</p></div>
+        <div className="domain-layout">
+          <div className="domain-list">{domains.map((domain) => <button key={domain.id} className={`domain-tab ${activeDomain === domain.id ? "active" : ""} ${domain.color}`} onClick={() => { setActiveDomain(domain.id); setExpanded(domain.id); }}><span className="domain-tab-icon"><domain.icon size={18} /></span><span><small>{domain.label}</small><strong>{domain.kicker}</strong></span><ChevronRight size={17} /></button>)}</div>
+          <div className={`domain-detail ${selectedDomain.color}`}><div className="detail-top"><div className="detail-icon"><selectedDomain.icon size={25} /></div><span>{selectedDomain.label}</span></div><h3>{selectedDomain.title}</h3><p>{selectedDomain.description}</p><div className="detail-items">{selectedDomain.items.map((item) => <div key={item}><Check size={14} /><span>{item}</span></div>)}</div><button className="detail-expand" onClick={() => setExpanded(expanded === selectedDomain.id ? null : selectedDomain.id)}>{expanded === selectedDomain.id ? "Masquer les responsabilités" : "Voir les responsabilités"}<ChevronDown size={15} /></button>{expanded === selectedDomain.id && <div className="expanded-note"><span>Connecté à</span><strong>{domains.filter((domain) => domain.id !== selectedDomain.id).slice(0, 3).map((domain) => domain.kicker).join(" · ")}</strong></div>}</div>
+        </div>
+      </section>
 
-        <section className="detail-section" id="lumiere-detail" data-reveal>
-          <div className="detail-kicker"><span>01</span><span className="marker-rule" /><span>Étude de cas sélectionnée</span></div>
-          <div className="detail-grid">
-            <div className="detail-heading"><p className="eyebrow">Lumière Parfums · 2026</p><h2>Donner une<br /><em>présence</em> au produit.</h2></div>
-            <div className="detail-copy"><p>Un projet e-commerce premium où la direction visuelle ne s’arrête pas à la vitrine. J’ai travaillé l’expérience comme un ensemble cohérent : récit de marque, catalogue, parcours d’achat, administration et infrastructure.</p><a href="#contact" className="text-link">Parler du projet <ArrowUpRight size={17} /></a></div>
-          </div>
-          <div className="detail-facts"><div><span>Rôle</span><strong>Conception · développement · sécurité</strong></div><div><span>Socle</span><strong>Node.js · PostgreSQL · Cloudinary</strong></div><div><span>État</span><strong className="fact-green"><Check size={15} /> Fonctionnel en local</strong></div></div>
-          <div className="proof-strip" aria-label="Preuves de réalisation"><div><span>01 · Parcours</span><strong>Catalogue → panier → commande</strong></div><div><span>02 · Système</span><strong>API Express et schéma PostgreSQL</strong></div><div><span>03 · Exploitation</span><strong>Admin, sécurité et déploiement</strong></div></div>
-        </section>
+      <section className="flow-section" id="flow"><div className="flow-heading"><div className="mks-eyebrow">03 · De la demande à la réalisation</div><h2>Un processus qui<br /><em>ne perd rien.</em></h2><p>Chaque étape devient visible, assignable et vérifiable. La coordination ne dépend plus d’une seule personne.</p></div><div className="flow-track">{flow.map(([number, title, description], index) => <div className="flow-step" key={number}><div className="flow-step-head"><span>{number}</span>{index < flow.length - 1 && <span className="flow-connector" />}</div><strong>{title}</strong><p>{description}</p></div>)}</div></section>
 
-        <section className="expertise-section" aria-labelledby="expertise-title" data-reveal>
-          <div className="section-marker"><span>03</span><span className="marker-rule" /></div>
-          <div className="expertise-heading"><p className="eyebrow">Ce que j’apporte</p><h2 id="expertise-title">Construire avec<br /><em>justesse.</em></h2></div>
-          <div className="expertise-list">{expertise.map(([number, title, body]) => <div className="expertise-item" key={number}><span className="expertise-number">{number}</span><div><h3>{title}</h3><p>{body}</p></div><ArrowUpRight size={18} /></div>)}</div>
-        </section>
+      <section className="communication-section"><div className="communication-card"><div className="card-icon"><MessageSquare /></div><div><div className="mks-eyebrow">04 · Discussion intégrée</div><h2>Les échanges font partie<br />du <em>dossier.</em></h2><p>Discussions par domaine, notifications, pièces jointes et historique : la conversation reste attachée au travail.</p></div><div className="communication-tools"><span><MessageSquare size={16} /> Discussions</span><span><Bell size={16} /> Notifications</span><span><FileText size={16} /> Pièces jointes</span></div></div></section>
 
-        <section className="contact-section" id="contact" data-reveal>
-          <div className="contact-top"><p className="eyebrow"><span className="eyebrow-line" /> Parlons de la suite</p><span className="contact-counter">04—04</span></div>
-          <h2>Un projet à<br /><em>mettre au monde ?</em></h2>
-          <p className="contact-intro">Un produit, une refonte ou une idée encore en notes. Écrivez-moi ce que vous cherchez à rendre plus clair, plus beau ou plus fiable. Je suis joignable par e-mail ou sur WhatsApp.</p>
-          <div className="contact-actions"><a className="contact-button" href="mailto:sergemetchri@gmail.com">Écrire un message <Mail size={17} /></a><a className="whatsapp-button" href="https://wa.me/2290195162664" target="_blank" rel="noreferrer">WhatsApp · 0195162664 <ExternalLink size={16} /></a><button className="copy-button" onClick={copyEmail}>{copied ? <><Check size={16} /> Adresse copiée</> : <><Copy size={16} /> Copier l’adresse</>}</button></div>
-        </section>
+      <section className="security-section" id="security"><div className="security-copy"><div className="mks-eyebrow">05 · Sécurité & contrôle</div><h2>La confiance se<br /><em>construit.</em></h2><p>La plateforme est pensée pour séparer les rôles, protéger les données et rendre chaque action vérifiable — du premier échange au rapport final.</p><a className="text-btn dark" href="mailto:mkservicegroupe23@gmail.com">Parler de la mise en œuvre <ArrowRight size={16} /></a></div><div className="security-grid"><div><LockKeyhole /><strong>Authentification forte</strong><span>Sessions sécurisées et contrôle d’accès.</span></div><div><Network /><strong>Données chiffrées</strong><span>Échanges protégés entre les domaines.</span></div><div><ClipboardCheck /><strong>Audit & traçabilité</strong><span>Journal des actions sensibles.</span></div><div><WalletCards /><strong>Sauvegardes</strong><span>Préparation à une stratégie de reprise.</span></div></div></section>
 
-        <footer className="site-footer"><span>© 2026 — METCHRI Jérôme Serge</span><span>Conçu et construit avec attention</span><a href="#top">Retour en haut <ArrowUpRight size={14} /></a></footer>
-      </div>
+      <section className="admin-section"><div className="admin-visual"><div className="admin-window"><div className="window-bar"><span /><span /><span /><small>MKS / CONTROL CENTER</small></div><div className="window-body"><div className="window-sidebar"><b>MKS</b><span className="selected"><BarChart3 size={13} /> Vue globale</span><span><Users size={13} /> Employés</span><span><Landmark size={13} /> Finances</span><span><FileText size={13} /> Rapports</span></div><div className="window-main"><div className="window-main-title"><div><small>Bonjour, Admin principal</small><strong>Vue consolidée</strong></div><div className="live-pill"><span /> Temps réel</div></div><div className="chart-row"><div className="chart-card large"><small>Activité des domaines</small><div className="chart-bars"><i /><i /><i /><i /><i /><i /><i /></div></div><div className="chart-card"><small>Répartition</small><div className="donut" /><span className="donut-label">6 domaines</span></div></div><div className="table-lines"><span /><span /><span /><span /></div></div></div></div></div><div className="admin-copy"><div className="mks-eyebrow">06 · Vue globale</div><h2>L’admin principal<br /><em>voit tout.</em></h2><p>Une vue de pilotage pour comprendre ce qui avance, ce qui attend et ce qui demande une décision — sans ouvrir six outils différents.</p><div className="admin-list"><span><Check size={15} /> Activité en temps réel</span><span><Check size={15} /> Finances & mouvements</span><span><Check size={15} /> Projets & chantiers</span><span><Check size={15} /> Employés & performances</span></div></div></section>
+
+      <section className="contact-section"><div><div className="mks-eyebrow">07 · Prochaine étape</div><h2>Construisons une<br /><em>vue commune.</em></h2><p>Le schéma devient une expérience. La prochaine étape consiste à choisir les modules à connecter en premier et à définir les permissions réelles.</p></div><div className="contact-actions"><a className="primary-btn light" href="mailto:mkservicegroupe23@gmail.com">Écrire à MKS Service <ArrowRight size={17} /></a><a className="contact-meta" href="tel:+2290161751053">+229 01 61 75 10 53</a><a className="contact-meta" href="mailto:mkservicegroupe23@gmail.com">mkservicegroupe23@gmail.com</a></div></section>
+
+      <footer className="mks-footer"><div className="mks-brand"><span className="mks-mark"><span>M</span><span>K</span><span>S</span></span><span><strong>MKS</strong><small>SERVICE</small></span></div><span>Ensemble, bâtissons l’avenir.</span><span>Bénin · Cotonou</span><span>© 2026 MKS Service</span></footer>
     </main>
   );
 }

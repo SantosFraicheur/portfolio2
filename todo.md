@@ -1,7 +1,8 @@
-# Suivi — Mise à jour du portfolio
+# MKS Service — suivi de réalisation
 
-- [x] Remplacer l’adresse e-mail provisoire par sergemetchri@gmail.com.
-- [x] Ajouter le contact WhatsApp 0195162664 avec un lien de contact.
-- [x] Présenter METCHRI Jérôme Serge et le parcours Étudiant en MIA 2 à l’UAC, Bénin.
-- [x] Vérifier le build et le rendu responsive après modification.
-- [ ] Sauvegarder un nouveau checkpoint du portfolio.
+- [ ] Remplacer l’interface du portfolio par la présentation MKS Service.
+- [ ] Intégrer les espaces Public, Client, RH, Finance, Employé et Administration.
+- [ ] Ajouter la visualisation des flux métier et des contrôles de sécurité.
+- [ ] Ajouter la documentation d’architecture et les instructions de déploiement.
+- [ ] Valider le build et les rendus desktop/mobile.
+- [ ] Créer l’archive ZIP prête à déployer.
