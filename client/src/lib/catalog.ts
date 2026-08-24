@@ -12,3 +12,10 @@ export function getServices(): ServiceItem[] { try { const raw = localStorage.ge
 export function saveServices(items: ServiceItem[]) { localStorage.setItem(key, JSON.stringify(items)); window.dispatchEvent(new Event("mks-services-updated")); }
 export function publishService(input: Omit<ServiceItem, "id">) { const item = { ...input, id: `${input.category.toLowerCase().replace(/[^a-z]+/g, "-")}-${Date.now()}` }; saveServices([item, ...getServices()]); return item; }
 export function removeService(id: string) { saveServices(getServices().filter((item) => item.id !== id)); }
+
+export type QuoteStatus = "En attente" | "Validé" | "Refusé";
+export type QuoteRequest = { id: string; serviceId: string; serviceTitle: string; category: string; message: string; budget: string; status: QuoteStatus; createdAt: string };
+const quoteKey = "mks-client-quotes";
+export function getQuotes(): QuoteRequest[] { try { const raw = localStorage.getItem(quoteKey); return raw ? JSON.parse(raw) : []; } catch { return []; } }
+export function saveQuote(quote: QuoteRequest) { const quotes = [quote, ...getQuotes().filter((item) => item.id !== quote.id)]; localStorage.setItem(quoteKey, JSON.stringify(quotes)); window.dispatchEvent(new Event("mks-quotes-updated")); }
+export function updateQuoteStatus(id: string, status: QuoteStatus) { const quotes = getQuotes().map((item) => item.id === id ? { ...item, status } : item); localStorage.setItem(quoteKey, JSON.stringify(quotes)); window.dispatchEvent(new Event("mks-quotes-updated")); }

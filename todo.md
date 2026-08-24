@@ -8,3 +8,13 @@
 - [x] Ajouter une gestion de prestations dans les espaces responsable/admin.
 - [x] Valider la publication et la demande en mode démonstration.
 - [ ] Sauvegarder un checkpoint et livrer l’archive mise à jour.
+
+## Améliorations navigation et devis
+
+- [x] Ajouter la recherche instantanée du catalogue.
+- [x] Ajouter les filtres par catégorie.
+- [x] Ajouter le tableau de suivi des demandes client.
+- [x] Ajouter les statuts En attente, Validé et Refusé.
+- [x] Ajouter le chargement animé à la soumission.
+- [x] Ajouter la confirmation visuelle de succès.
+- [ ] Sauvegarder un nouveau checkpoint et livrer la mise à jour.
