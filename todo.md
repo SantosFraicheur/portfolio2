@@ -42,3 +42,12 @@
 - [x] Ajouter des preuves de confiance sans inventer de témoignages.
 - [x] Vérifier la lisibilité et le responsive.
 - [ ] Sauvegarder un checkpoint après livraison.
+
+## Galerie, contact et recherche publique
+
+- [x] Ajouter une galerie de réalisations avec visuels distincts.
+- [x] Ajouter un formulaire de contact interactif avec message d’état.
+- [x] Confirmer les coordonnées officielles MKS dans le contact.
+- [x] Améliorer la recherche rapide et les animations du catalogue.
+- [x] Vérifier le responsive et le build.
+- [ ] Sauvegarder un checkpoint après livraison.
