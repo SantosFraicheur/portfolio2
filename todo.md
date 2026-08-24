@@ -18,3 +18,11 @@
 - [x] Ajouter le chargement animé à la soumission.
 - [x] Ajouter la confirmation visuelle de succès.
 - [ ] Sauvegarder un nouveau checkpoint et livrer la mise à jour.
+
+## Suivi avancé des demandes de devis
+
+- [x] Rendre chaque demande cliquable avec une vue détaillée.
+- [x] Ajouter le tri par date et par statut dans l’espace client.
+- [x] Ajouter les actions Valider et Refuser dans les espaces administratifs.
+- [x] Synchroniser les changements de statut entre admin et client.
+- [x] Tester les parcours et créer un checkpoint.
