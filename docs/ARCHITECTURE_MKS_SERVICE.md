@@ -91,3 +91,27 @@ Les responsables de domaine et l’admin principal peuvent publier une prestatio
 Le visiteur non connecté est envoyé vers l’inscription ou la connexion avec la prestation mémorisée. Après authentification, le client retrouve la prestation choisie dans son espace et peut envoyer sa demande. En production, le serveur devra contrôler que l’utilisateur possède un rôle client, que la prestation est publiée et que les permissions de publication appartiennent au responsable du domaine ou à l’admin principal.
 
 Dans la démonstration frontend, les prestations sont conservées dans `localStorage` pour rendre le parcours visible immédiatement. Cette persistance doit être remplacée par des tables PostgreSQL et des routes API authentifiées avant toute utilisation métier.
+
+## 10. Fonctionnalités actuellement implémentées dans le prototype
+
+La page publique expose un catalogue de prestations publiées, une recherche instantanée par titre, domaine ou description et des filtres par catégorie. Chaque prestation possède une action « Demander un devis ». Lorsqu’un visiteur n’est pas connecté, le choix de la prestation est conservé avant la redirection vers l’inscription ou la connexion.
+
+L’espace client affiche les demandes enregistrées, leurs compteurs par statut et un tableau de suivi. Une demande est cliquable afin d’afficher son détail complet : prestation, catégorie, message, budget, date et statut. Le tableau peut être trié par date croissante, date décroissante ou statut.
+
+Les responsables de domaine et les administrateurs voient les demandes à traiter dans leur espace interne. Ils peuvent exécuter les actions « Valider » et « Refuser »; le nouveau statut est immédiatement répercuté dans l’espace client du prototype.
+
+## 11. Structure frontend actuelle
+
+| Chemin | Responsabilité |
+|---|---|
+| `client/src/pages/Home.tsx` | Accueil public, catalogue, recherche, filtres et lancement d’une demande |
+| `client/src/pages/Access.tsx` | Connexion, inscription, espace client, détail/tri des devis et espaces admin |
+| `client/src/lib/catalog.ts` | Modèles `ServiceItem` et `QuoteRequest`, stockage et mise à jour des statuts |
+| `client/src/App.tsx` | Routage public, client et espaces internes par hash |
+| `client/src/index.css` | Design system, responsive, états de chargement et confirmations |
+| `docs/ARCHITECTURE_MKS_SERVICE.md` | Architecture fonctionnelle, flux, rôles et limites |
+| `docs/DEPLOYMENT.md` | Installation, build et déploiement |
+
+## 12. Limites importantes du prototype
+
+La version actuelle stocke les prestations, la session et les demandes dans `localStorage` ou `sessionStorage`. Les hashes ne sont pas des mécanismes de sécurité et les validations admin ne sont pas encore protégées par une permission serveur. Pour la production, il faut remplacer cette logique par une API authentifiée, PostgreSQL, des rôles vérifiés côté serveur, une journalisation et un système d’e-mails transactionnels pour notifier les changements de statut.

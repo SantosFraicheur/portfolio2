@@ -26,3 +26,19 @@
 - [x] Ajouter les actions Valider et Refuser dans les espaces administratifs.
 - [x] Synchroniser les changements de statut entre admin et client.
 - [x] Tester les parcours et créer un checkpoint.
+
+## Livraison archive complète
+
+- [ ] Vérifier la présence des sources, de la documentation et des fichiers de configuration.
+- [ ] Exclure `.env`, `node_modules`, `dist`, `.git` et les logs temporaires.
+- [ ] Revalider le build avant l’archivage.
+- [ ] Créer et tester l’archive ZIP déployable.
+
+## Design et contenu de la page publique
+
+- [x] Clarifier le positionnement et la promesse dans le hero.
+- [x] Renforcer les contenus des domaines et prestations.
+- [x] Améliorer les appels à l’action vers le devis et le contact.
+- [x] Ajouter des preuves de confiance sans inventer de témoignages.
+- [x] Vérifier la lisibilité et le responsive.
+- [ ] Sauvegarder un checkpoint après livraison.
