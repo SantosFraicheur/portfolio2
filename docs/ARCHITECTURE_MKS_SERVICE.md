@@ -83,3 +83,11 @@ La version frontend fournie prépare ces contrôles dans l’interface : badges 
 ## 8. Évolution recommandée
 
 La prochaine étape technique consiste à ajouter une API backend séparée avec PostgreSQL, un fournisseur d’authentification et un stockage privé. Il faudra ensuite remplacer les données de démonstration par des requêtes côté serveur, ajouter des tests de permissions et connecter les workflows de devis, RH et finance.
+
+## 9. Catalogue de prestations et demandes de devis
+
+Les responsables de domaine et l’admin principal peuvent publier une prestation composée d’un identifiant, d’un titre, d’un domaine, d’une description, d’un libellé de prix, d’un auteur et d’un statut de publication. Une prestation publiée est visible sur la page publique et possède un bouton « Demander un devis ».
+
+Le visiteur non connecté est envoyé vers l’inscription ou la connexion avec la prestation mémorisée. Après authentification, le client retrouve la prestation choisie dans son espace et peut envoyer sa demande. En production, le serveur devra contrôler que l’utilisateur possède un rôle client, que la prestation est publiée et que les permissions de publication appartiennent au responsable du domaine ou à l’admin principal.
+
+Dans la démonstration frontend, les prestations sont conservées dans `localStorage` pour rendre le parcours visible immédiatement. Cette persistance doit être remplacée par des tables PostgreSQL et des routes API authentifiées avant toute utilisation métier.

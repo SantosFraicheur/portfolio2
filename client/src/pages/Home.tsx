@@ -1,6 +1,7 @@
 // MKS Service — portail public uniquement. Les espaces internes sont accessibles via hash après une session de démonstration.
 import { ArrowRight, Building2, CheckCircle2, ChevronRight, Clock3, FileText, HardHat, Mail, Menu, Phone, ShieldCheck, Users, WalletCards, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getServices, type ServiceItem } from "../lib/catalog";
 
 const services = [
   { title: "Construction & BTP", text: "Des équipes coordonnées pour vos projets, de l’étude à la livraison.", icon: HardHat, color: "blue" },
@@ -13,7 +14,10 @@ const publicLinks = ["Nos services", "Notre méthode", "Demander un devis", "Con
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showAccess, setShowAccess] = useState(false);
+  const [catalog, setCatalog] = useState<ServiceItem[]>(getServices().filter((item) => item.published));
+  useEffect(() => { const refresh = () => setCatalog(getServices().filter((item) => item.published)); window.addEventListener("mks-services-updated", refresh); return () => window.removeEventListener("mks-services-updated", refresh); }, []);
   const jump = (id: string) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
+  const requestQuote = (service: ServiceItem) => { sessionStorage.setItem("mks-pending-quote", service.id); if (sessionStorage.getItem("mks-client-session") !== "demo") { window.location.href = `/login?mode=register&service=${encodeURIComponent(service.id)}`; return; } window.location.href = `/#client-devis-${service.id}`; };
 
   return <main className="public-app">
     <header className="public-header">
@@ -28,6 +32,8 @@ export default function Home() {
     <section className="public-intro"><div className="section-marker">01 <span /></div><div><div className="public-kicker">Une équipe, plusieurs expertises</div><h2>Le travail bien fait<br /><em>commence par l’écoute.</em></h2></div><p>De la première demande au compte rendu final, nous clarifions les responsabilités et nous gardons le fil. Vous savez qui agit, où en est le projet et quelle est la prochaine étape.</p></section>
 
     <section className="services-section" id="services"><div className="section-top"><div><div className="public-kicker">02 · Ce que nous faisons</div><h2>Des solutions<br /><em>sur le terrain.</em></h2></div><p>Choisissez le besoin qui vous ressemble. Notre équipe vous orientera vers le bon interlocuteur.</p></div><div className="services-grid">{services.map(({ title, text, icon: Icon, color }) => <article className={`service-card ${color}`} key={title}><div className="service-icon"><Icon size={24} /></div><span className="service-number">0{services.findIndex((service) => service.title === title) + 1}</span><h3>{title}</h3><p>{text}</p><button onClick={() => jump("quote")}>Parler de ce besoin <ArrowRight size={15} /></button></article>)}</div></section>
+
+    <section className="catalog-section" id="catalog"><div className="section-top"><div><div className="public-kicker">02 bis · Prestations disponibles</div><h2>Des offres<br /><em>à demander.</em></h2></div><p>Les responsables de domaine publient ici leurs prestations. Choisissez une offre pour demander un devis personnalisé.</p></div><div className="catalog-grid">{catalog.map((service) => <article className="catalog-card" key={service.id}><div className="catalog-card-top"><span>{service.category}</span><span className="catalog-status">Publié</span></div><h3>{service.title}</h3><p>{service.description}</p><div className="catalog-card-bottom"><strong>{service.priceLabel}</strong><button onClick={() => requestQuote(service)}>Demander un devis <ArrowRight size={15} /></button></div><small>Publié par {service.publisher}</small></article>)}</div></section>
 
     <section className="method-section" id="method"><div className="method-copy"><div className="public-kicker">03 · Notre méthode</div><h2>Moins de flou.<br /><em>Plus d’avancement.</em></h2><p>Une méthode simple pour des projets qui restent lisibles : comprendre, proposer, organiser, réaliser, rendre compte.</p><a className="text-link" href="#quote">Commencer une discussion <ArrowRight size={15} /></a></div><div className="method-steps">{[["01", "Écouter", "Comprendre le besoin réel."], ["02", "Proposer", "Présenter un devis précis."], ["03", "Organiser", "Affecter les bonnes ressources."], ["04", "Rendre compte", "Documenter le résultat."]].map(([number, title, text]) => <div className="method-step" key={number}><span>{number}</span><div><strong>{title}</strong><p>{text}</p></div></div>)}</div></section>
 

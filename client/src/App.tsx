@@ -5,7 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import { AccessRequired, InternalArea, LoginPage, internalAreas } from "./pages/Access";
+import { AccessRequired, ClientDashboard, InternalArea, LoginPage, internalAreas } from "./pages/Access";
 import { Toaster } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
 
@@ -13,7 +13,7 @@ function ClientGate() {
   const [session, setSession] = useState(() => sessionStorage.getItem("mks-client-session") === "demo");
   useEffect(() => { const update = () => setSession(sessionStorage.getItem("mks-client-session") === "demo"); window.addEventListener("storage", update); window.addEventListener("hashchange", update); return () => { window.removeEventListener("storage", update); window.removeEventListener("hashchange", update); }; }, []);
   if (!session) return <section className="client-login-required"><div><div className="public-kicker">ESPACE CLIENT · ACCÈS RÉSERVÉ</div><h1>Connectez-vous<br /><em>pour continuer.</em></h1><p>Votre espace client est disponible après authentification.</p><a className="primary-action" href="/login">Se connecter <ArrowRight size={16} /></a><a className="back-public-link" href="/#top">Retour au site public</a></div></section>;
-  return <div data-client-gate="demo"><ClientPanel onLogout={() => { sessionStorage.removeItem("mks-client-session"); window.location.href = "/"; }} /></div>;
+  return <div data-client-gate="demo"><ClientDashboard onLogout={() => { sessionStorage.removeItem("mks-client-session"); sessionStorage.removeItem("mks-pending-quote"); window.location.href = "/"; }} /></div>;
 }
 
 function ClientPanel({ onLogout }: { onLogout: () => void }) {
