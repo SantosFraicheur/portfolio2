@@ -35,4 +35,4 @@
 - [x] Valider le contrôle TypeScript.
 - [x] Valider le build de production.
 - [x] Vérifier le rendu desktop et mobile.
-- [ ] Enregistrer le prochain checkpoint après la synchronisation GitHub.
+- [x] Enregistrer le prochain checkpoint après la synchronisation GitHub.
