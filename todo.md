@@ -87,4 +87,4 @@
 - [x] Ajouter MKS SERVICE, Bénin · Cotonou, téléphone et e-mail dans le pied de page.
 - [x] Ajouter une section structurée d’informations d’entreprise sans inventer d’IFU ou de RCCM.
 - [x] Vérifier le rendu desktop/mobile et le build.
-- [ ] Sauvegarder un checkpoint après livraison.
+- [x] Sauvegarder un checkpoint après livraison.
