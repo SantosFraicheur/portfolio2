@@ -60,4 +60,23 @@ describe("interactions responsive du portfolio", () => {
     fireEvent.keyDown(menuButton, { key: "Enter", code: "Enter" });
     expect(document.activeElement).toBe(menuButton);
   });
+
+  it("affiche le retour en haut après défilement et le rend activable", () => {
+    const scrollToSpy = vi.spyOn(window, "scrollTo").mockImplementation(() => undefined);
+    render(<Home />);
+
+    const backToTop = document.querySelector<HTMLButtonElement>(".back-to-top");
+    expect(backToTop).not.toBeNull();
+    if (!backToTop) return;
+    expect(backToTop.tabIndex).toBe(-1);
+
+    Object.defineProperty(window, "scrollY", { configurable: true, value: 800, writable: true });
+    fireEvent.scroll(window);
+    expect(backToTop.tabIndex).toBe(0);
+    expect(backToTop.classList.contains("visible")).toBe(true);
+
+    fireEvent.click(backToTop);
+    expect(scrollToSpy).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+    scrollToSpy.mockRestore();
+  });
 });

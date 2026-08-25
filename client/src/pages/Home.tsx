@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowDownRight,
+  ArrowUp,
   ArrowUpRight,
   Check,
   Copy,
@@ -62,6 +63,7 @@ export default function Home() {
   const [activeFilter, setActiveFilter] = useState("Tous");
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const filters = ["Tous", "Réalisé"];
 
   const filteredProjects = useMemo(() => {
@@ -71,12 +73,23 @@ export default function Home() {
 
   useEffect(() => {
     const revealItems = document.querySelectorAll<HTMLElement>("[data-reveal]");
+    if (!("IntersectionObserver" in window)) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+      return;
+    }
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
-      { threshold: 0.12 },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
     );
     revealItems.forEach((item) => observer.observe(item));
     return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const updateBackToTop = () => setShowBackToTop(window.scrollY > 560);
+    updateBackToTop();
+    window.addEventListener("scroll", updateBackToTop, { passive: true });
+    return () => window.removeEventListener("scroll", updateBackToTop);
   }, []);
 
   const copyEmail = async () => {
@@ -86,6 +99,11 @@ export default function Home() {
   };
 
   const closeMenu = () => setMenuOpen(false);
+
+  const scrollToTop = () => {
+    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+  };
 
   return (
     <main className="site-shell">
@@ -101,13 +119,13 @@ export default function Home() {
       <div className="page-content" id="top">
         <header className="topbar">
           <a href="#top" className="mobile-brand"><img src={ASSETS.mark} alt="" /> <span>METCHRI / PORTFOLIO</span></a>
-          <nav className={`main-nav ${menuOpen ? "open" : ""}`} aria-label="Navigation principale">
+          <nav id="primary-navigation" className={`main-nav ${menuOpen ? "open" : ""}`} aria-label="Navigation principale">
             <a href="#work" onClick={closeMenu}>Projets <span>01</span></a>
             <a href="#approach" onClick={closeMenu}>Approche <span>02</span></a>
             <a href="#contact" onClick={closeMenu}>Contact <span>03</span></a>
           </nav>
           <a className="top-availability" href="#contact">Disponible pour un projet <span className="availability-dot" /></a>
-          <button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}>
+          <button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-controls="primary-navigation" aria-expanded={menuOpen} aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}>
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </header>
@@ -118,7 +136,7 @@ export default function Home() {
             <h1 id="hero-title">Des interfaces qui<br /><em>savent</em> pourquoi<br />elles existent.</h1>
             <p className="hero-intro">Je suis METCHRI Jérôme Serge, développeur web full-stack et étudiant en Licence MIA 2 à l’UAC au Bénin. Je conçois et développe des applications web complètes, de l’interface à l’API, avec une attention particulière portée à la clarté, à la sécurité et à la fiabilité.</p>
             <div className="profile-card" aria-label="Informations personnelles de METCHRI Jérôme Serge">
-              <img className="profile-portrait" src="/assets/portfolio/metchri-jerome-serge.webp" alt="Portrait de METCHRI Jérôme Serge" />
+              <img className="profile-portrait" src="/assets/portfolio/metchri-jerome-serge.webp" alt="Portrait de METCHRI Jérôme Serge" loading="lazy" decoding="async" />
               <div><span className="profile-label">Profil</span><strong>METCHRI Jérôme Serge</strong><small>Étudiant en Licence MIA 2 · UAC Bénin</small></div>
               <div className="profile-socials" aria-label="Réseaux sociaux et contact">
                 <a className="profile-social whatsapp" href="https://wa.me/2290195162664" target="_blank" rel="noreferrer" aria-label="Contacter METCHRI Jérôme Serge sur WhatsApp" title="WhatsApp"><MessageCircle size={16} /></a>
@@ -130,7 +148,7 @@ export default function Home() {
           </div>
           <div className="hero-visual" data-reveal>
             <div className="hero-image-wrap">
-              <img src={ASSETS.hero} alt="Bureau de création avec ordinateur, papier et branche de laurier" />
+              <img src={ASSETS.hero} alt="Bureau de création avec ordinateur, papier et branche de laurier" loading="eager" fetchPriority="high" decoding="async" />
               <span className="image-note note-top">Fig. 01 / atelier en cours</span>
               <span className="image-note note-bottom">Concevoir avec intention</span>
             </div>
@@ -158,9 +176,9 @@ export default function Home() {
           </div>
           <div className="project-list">
             {filteredProjects.map((project, index) => (
-              <article className={`project-row ${project.featured ? "featured" : ""}`} key={project.id} data-reveal style={{ "--delay": `${index * 70}ms` } as React.CSSProperties}>
+              <article className={`project-row ${project.featured ? "featured" : ""}`} key={project.id} data-reveal="project" style={{ "--delay": `${index * 70}ms` } as React.CSSProperties}>
                 <div className="project-number">{project.number}</div>
-                <div className="project-image-wrap"><img src={project.image} alt={`Aperçu éditorial du projet ${project.title}`} /><span className={`project-status ${project.status === "réalisé" ? "status-done" : "status-pending"}`}>{project.status}</span></div>
+                <div className="project-image-wrap"><img src={project.image} alt={`Aperçu éditorial du projet ${project.title}`} loading="eager" decoding="async" /><span className={`project-status ${project.status === "réalisé" ? "status-done" : "status-pending"}`}>{project.status}</span></div>
                 <div className="project-info">
                   <div className="project-title-line"><h3>{project.title}</h3><span className="project-year">{project.year}</span></div>
                   <p className="project-category">{project.category}</p>
@@ -197,6 +215,7 @@ export default function Home() {
         </section>
 
         <footer className="site-footer"><span>© 2026 — METCHRI Jérôme Serge</span><span>Conçu et construit avec attention</span><a href="#top">Retour en haut <ArrowUpRight size={14} /></a></footer>
+        <button className={`back-to-top ${showBackToTop ? "visible" : ""}`} onClick={scrollToTop} aria-hidden={!showBackToTop} tabIndex={showBackToTop ? 0 : -1} aria-label="Retour en haut de page" title="Retour en haut de page"><ArrowUp size={18} /><span>Haut</span></button>
       </div>
     </main>
   );

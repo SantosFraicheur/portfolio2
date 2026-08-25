@@ -56,6 +56,17 @@
 - [x] Remplacer ou sécuriser les références d’images du portfolio.
 - [x] Vérifier que les images répondent correctement dans le preview et le build.
 - [x] Sauvegarder et synchroniser la correction.
+
+## Animation et navigation mobile
+
+- [x] Ajouter des apparitions progressives au défilement pour les projets et sections importantes.
+- [x] Respecter la préférence système `prefers-reduced-motion` pour les animations.
+- [x] Vérifier l’affichage et le cadrage des images à 320, 375, 390 et 430 px.
+- [x] Ajuster les dimensions et le chargement des images sur mobile.
+- [x] Ajouter un bouton de retour en haut accessible sur les petits écrans.
+- [x] Tester les interactions, le build et le rendu responsive après les changements.
+- [x] Garantir le chargement du visuel projet principal sur mobile avant le contrôle d’affichage.
+- [x] Prendre une capture finale à 375 px après les changements d’animations et d’images.
 - [x] Enregistrer un checkpoint après la correction des assets publics.
 - [x] Committer, pousser et revalider les changements sur le dépôt public portfolio2.
 
