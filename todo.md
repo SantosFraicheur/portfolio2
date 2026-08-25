@@ -41,7 +41,7 @@
 - [x] Améliorer les appels à l’action vers le devis et le contact.
 - [x] Ajouter des preuves de confiance sans inventer de témoignages.
 - [x] Vérifier la lisibilité et le responsive.
-- [ ] Sauvegarder un checkpoint après livraison.
+- [x] Sauvegarder un checkpoint après livraison.
 
 ## Galerie, contact et recherche publique
 
@@ -50,4 +50,14 @@
 - [x] Confirmer les coordonnées officielles MKS dans le contact.
 - [x] Améliorer la recherche rapide et les animations du catalogue.
 - [x] Vérifier le responsive et le build.
-- [ ] Sauvegarder un checkpoint après livraison.
+- [x] Sauvegarder un checkpoint après livraison.
+
+## Modales galerie et validation contact
+
+- [x] Ajouter les données détaillées de chaque réalisation.
+- [x] Ajouter une modale accessible pour chaque projet.
+- [x] Ajouter les filtres par catégorie de réalisations.
+- [x] Ajouter la validation temps réel des champs contact.
+- [x] Ajouter l’animation de confirmation d’envoi.
+- [x] Valider le responsive, l’accessibilité et le build.
+- [x] Sauvegarder un checkpoint après livraison.
