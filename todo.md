@@ -98,6 +98,20 @@
 - [x] Tester le routage, les liens, le responsive et le build.
 - [x] Sauvegarder un checkpoint après livraison.
 
+## Recherche catalogue et contact WhatsApp
+
+- [x] Ajouter ou renforcer la recherche instantanée du catalogue public.
+- [x] Ajouter ou renforcer les filtres par catégorie du catalogue public.
+- [x] Ajouter un état vide clair lorsque la recherche ne renvoie aucun produit.
+- [x] Ajouter un bouton WhatsApp flottant global vers le contact officiel.
+- [x] Vérifier la visibilité, l’accessibilité, le responsive et les destinations des liens.
+- [ ] Sauvegarder un checkpoint après livraison.
+
+## Correction WhatsApp officiel
+
+- [x] Aligner le lien WhatsApp sur le numéro officiel MKS Service ou clarifier explicitement le numéro utilisé.
+- [x] Revalider explicitement le lien WhatsApp et son rendu responsive.
+
 ## Contrôles correctifs avant clôture
 
 - [x] Corriger ou documenter l’erreur runtime dotenv du serveur.

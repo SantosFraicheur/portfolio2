@@ -1,7 +1,7 @@
 // MKS Service — routeur public et espaces privés de démonstration par hash. Les permissions réelles doivent être validées côté serveur.
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -10,6 +10,8 @@ import LegalPage from "./pages/Legal";
 import { AccessRequired, ClientDashboard, InternalArea, LoginPage, internalAreas } from "./pages/Access";
 import { Toaster } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
+
+function WhatsAppFloat() { return <a className="whatsapp-float" href="https://wa.me/2290161751053?text=Bonjour%20MKS%20Service%2C%20je%20souhaite%20obtenir%20des%20informations." target="_blank" rel="noreferrer" aria-label="Contacter MKS Service sur WhatsApp"><MessageCircle size={22} /><span>WhatsApp</span></a>; }
 
 function ClientGate() {
   const { isAuthenticated, loading } = useAuth();
@@ -36,4 +38,4 @@ function HashRouter() {
 
 function Router() { return <Switch><Route path="/login" component={LoginPage} /><Route path="/mentions-legales" component={LegalPage} /><Route component={HashRouter} /></Switch>; }
 
-export default function App() { return <ErrorBoundary><ThemeProvider defaultTheme="light"><TooltipProvider><Toaster /><Router /></TooltipProvider></ThemeProvider></ErrorBoundary>; }
+export default function App() { return <ErrorBoundary><ThemeProvider defaultTheme="light"><TooltipProvider><Toaster /><Router /><WhatsAppFloat /></TooltipProvider></ThemeProvider></ErrorBoundary>; }
