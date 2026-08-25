@@ -5,8 +5,11 @@ import {
   ArrowUpRight,
   Check,
   Copy,
+  Download,
   ExternalLink,
+  Github,
   Mail,
+  MessageCircle,
   Menu,
   X,
 } from "lucide-react";
@@ -116,8 +119,13 @@ export default function Home() {
             <p className="hero-intro">Je suis METCHRI Jérôme Serge, étudiant en MIA 2 à l’UAC au Bénin. Je conçois et construis des expériences numériques où la direction artistique, la clarté produit et la fiabilité technique avancent ensemble.</p>
             <div className="profile-card" aria-label="Informations personnelles de METCHRI Jérôme Serge">
               <img className="profile-portrait" src="/manus-storage/metchri-jerome-serge_98c8ef04.webp" alt="Portrait de METCHRI Jérôme Serge" />
-              <div><span className="profile-label">Profil</span><strong>METCHRI Jérôme Serge</strong><small>Étudiant en MIA 2 · UAC Bénin</small></div>
+              <div><span className="profile-label">Profil</span><strong>METCHRI Jérôme Serge</strong><small>Étudiant en Licence MIA 2 · UAC Bénin</small></div>
+              <div className="profile-socials" aria-label="Réseaux sociaux et contact">
+                <a className="profile-social whatsapp" href="https://wa.me/2290195162664" target="_blank" rel="noreferrer" aria-label="Contacter METCHRI Jérôme Serge sur WhatsApp" title="WhatsApp"><MessageCircle size={16} /></a>
+                <a className="profile-social github" href="https://github.com/" target="_blank" rel="noreferrer" aria-label="Ouvrir GitHub — profil à renseigner" title="GitHub — profil à renseigner"><Github size={16} /></a>
+              </div>
             </div>
+            <a className="cv-download" href="/manus-storage/cv-metchri-jerome-serge_3adfd226.pdf" target="_blank" rel="noreferrer" download="CV-METCHRI-Jerome-Serge.pdf"><Download size={15} /> Télécharger mon CV</a>
             <a href="#work" className="text-link">Voir les projets <ArrowDownRight size={17} /></a>
           </div>
           <div className="hero-visual" data-reveal>

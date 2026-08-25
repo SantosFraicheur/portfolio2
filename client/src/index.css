@@ -202,3 +202,78 @@ h1 em, h2 em { color: var(--laurel); font-style: italic; }
     flex-basis: 3.65rem;
   }
 }
+
+.profile-card {
+  grid-template-columns: auto 1fr auto;
+}
+
+.profile-socials {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 0.35rem;
+}
+
+.profile-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(42, 39, 33, 0.2);
+  color: var(--ink, #27231d);
+  transition: transform 180ms ease, color 180ms ease, background 180ms ease;
+}
+
+.profile-social:hover,
+.profile-social:focus-visible {
+  transform: translateY(-2px);
+  color: #fff;
+  background: var(--accent, #587a68);
+  outline: none;
+}
+
+.profile-social.whatsapp:hover,
+.profile-social.whatsapp:focus-visible {
+  background: #1fa968;
+}
+
+.cv-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  margin-bottom: 1rem;
+  padding: 0.58rem 0.78rem;
+  border: 1px solid var(--ink, #27231d);
+  color: var(--ink, #27231d);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.cv-download:hover,
+.cv-download:focus-visible {
+  color: #fff;
+  background: var(--ink, #27231d);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+@media (max-width: 640px) {
+  .profile-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+  }
+
+  .profile-socials {
+    grid-column: 2;
+    margin-left: 0;
+  }
+
+  .cv-download {
+    margin-bottom: 0.85rem;
+  }
+}
