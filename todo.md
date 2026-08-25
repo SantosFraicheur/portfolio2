@@ -121,14 +121,15 @@
 - [ ] Revalider le catalogue public avec des prestations MySQL/TiDB réelles.
 - [ ] Revalider le filtre min/max, le tri prix et la page détail avec données publiées.
 - [x] Effectuer un contrôle responsive mobile spécifique du catalogue et de la page détail.
-- [ ] Sauvegarder un checkpoint après livraison.
+- [ ] Sauvegarder un checkpoint final après revalidation sur une prestation réelle.
+- [x] Sauvegarder un checkpoint après livraison.
 
 ## Base PostgreSQL autonome
 
 - [x] Créer un fichier SQL PostgreSQL séparé de la base active.
 - [x] Documenter les tables, contraintes, index et procédure de connexion ultérieure.
 - [x] Vérifier la syntaxe et l’absence d’opérations destructives.
-- [ ] Sauvegarder un checkpoint postérieur à la création du dossier PostgreSQL autonome.
+- [x] Sauvegarder un checkpoint postérieur à la création du dossier PostgreSQL autonome.
 
 ## Correction WhatsApp officiel
 
@@ -141,3 +142,12 @@
 - [x] Renforcer concrètement la configuration DB/API ou documenter l’absence de changement supplémentaire requis.
 - [x] Tester la page Mentions légales sur mobile.
 - [x] Vérifier explicitement les liens tel, mailto et mentions légales.
+
+## Repositionnement site entreprise MKS Service
+
+- [x] Supprimer ou reformuler les références à un portfolio personnel dans les contenus visibles.
+- [x] Renforcer la présentation institutionnelle de MKS Service et ses domaines d’activité.
+- [x] Aligner les titres, métadonnées et appels à l’action sur une entreprise de services.
+- [x] Effectuer un contrôle visuel desktop explicite de `/` et `/mentions-legales` après le repositionnement institutionnel.
+- [x] Vérifier les tests et le build après ce contrôle desktop.
+- [ ] Sauvegarder un checkpoint après la validation desktop finale du repositionnement MKS Service.
