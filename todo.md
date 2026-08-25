@@ -88,3 +88,19 @@
 - [x] Ajouter une section structurée d’informations d’entreprise sans inventer d’IFU ou de RCCM.
 - [x] Vérifier le rendu desktop/mobile et le build.
 - [x] Sauvegarder un checkpoint après livraison.
+
+## Base de données, contact et mentions légales
+
+- [x] Vérifier et renforcer la configuration sécurisée de la base de données et de l’API.
+- [x] Vérifier les liens cliquables téléphone et e-mail du pied de page.
+- [x] Créer la page dédiée aux mentions légales avec les informations connues et les éléments à compléter.
+- [x] Ajouter le lien Mentions légales dans le pied de page.
+- [x] Tester le routage, les liens, le responsive et le build.
+- [x] Sauvegarder un checkpoint après livraison.
+
+## Contrôles correctifs avant clôture
+
+- [x] Corriger ou documenter l’erreur runtime dotenv du serveur.
+- [x] Renforcer concrètement la configuration DB/API ou documenter l’absence de changement supplémentaire requis.
+- [x] Tester la page Mentions légales sur mobile.
+- [x] Vérifier explicitement les liens tel, mailto et mentions légales.
