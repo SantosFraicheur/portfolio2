@@ -7,7 +7,7 @@
 - [x] Ajouter le formulaire de devis dans l’espace client.
 - [x] Ajouter une gestion de prestations dans les espaces responsable/admin.
 - [x] Valider la publication et la demande en mode démonstration.
-- [ ] Sauvegarder un checkpoint et livrer l’archive mise à jour.
+- [x] Sauvegarder un checkpoint et livrer l’archive mise à jour.
 
 ## Améliorations navigation et devis
 
@@ -17,7 +17,7 @@
 - [x] Ajouter les statuts En attente, Validé et Refusé.
 - [x] Ajouter le chargement animé à la soumission.
 - [x] Ajouter la confirmation visuelle de succès.
-- [ ] Sauvegarder un nouveau checkpoint et livrer la mise à jour.
+- [x] Sauvegarder un nouveau checkpoint et livrer la mise à jour.
 
 ## Suivi avancé des demandes de devis
 
@@ -29,10 +29,10 @@
 
 ## Livraison archive complète
 
-- [ ] Vérifier la présence des sources, de la documentation et des fichiers de configuration.
-- [ ] Exclure `.env`, `node_modules`, `dist`, `.git` et les logs temporaires.
-- [ ] Revalider le build avant l’archivage.
-- [ ] Créer et tester l’archive ZIP déployable.
+- [x] Vérifier la présence des sources, de la documentation et des fichiers de configuration.
+- [x] Exclure `.env`, `node_modules`, `dist`, `.git` et les logs temporaires.
+- [x] Revalider le build avant l’archivage.
+- [x] Créer et tester l’archive ZIP déployable.
 
 ## Design et contenu de la page publique
 
