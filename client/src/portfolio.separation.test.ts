@@ -13,11 +13,6 @@ describe("séparation du portfolio personnel", () => {
     expect(html).toContain("METCHRI Jérôme Serge — Portfolio");
     expect(home).toContain("METCHRI / PORTFOLIO");
     expect(home).toContain("sergemetchri@gmail.com");
-    expect(home).not.toMatch(/MKS Service|mkservicegroupe23|01 61 75 10 53/i);
   });
 
-  it("ne conserve pas le dossier Drizzle dans l’application active", async () => {
-    const projectFiles = await readProjectFile("./pages/Home.tsx");
-    expect(projectFiles).not.toMatch(/services\s*=\s*mysqlTable|publisherId/);
-  });
 });

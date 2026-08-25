@@ -1,5 +1,0 @@
-# Contrôle visuel — CV et réseaux sociaux
-
-Le contrôle desktop de la page d’accueil confirme que le portfolio se charge correctement avec sa mise en page éditoriale. La route `/mentions-legales` renvoie actuellement une page 404 dans la version restaurée d8950194, car cette page appartenait aux évolutions MKS Service ultérieures et n’existe pas dans le checkpoint restauré. Le contrôle spécifique du bloc portrait, du bouton CV et des icônes sociales doit être effectué dans la zone correspondante de la page d’accueil avant livraison finale.
-
-Le contrôle plein écran desktop et mobile confirme que le portrait, le bouton « Télécharger mon CV » et les icônes WhatsApp/GitHub s’intègrent dans la section d’informations. Le bouton CV est positionné sous le bloc portrait et le lien WhatsApp ouvre le contact officiel. Le lien GitHub est encore générique (`https://github.com/`) en attente du profil personnel exact de l’utilisateur. La route de mentions légales n’existe pas dans la version restaurée d8950194.
