@@ -1,16 +1,20 @@
 import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertService, InsertUser, services, users } from "../drizzle/schema";
-import { ENV } from './_core/env';
+import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
+
+export function isMySqlConnectionString(value?: string) {
+  return value?.startsWith("mysql://") === true || value?.startsWith("mysql2://") === true;
+}
 
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
       _db = drizzle(process.env.DATABASE_URL);
     } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
+      console.warn("[Database] Failed to configure MySQL/TiDB:", error);
       _db = null;
     }
   }
@@ -29,7 +33,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   });
   if (user.lastSignedIn !== undefined) { values.lastSignedIn = user.lastSignedIn; updateSet.lastSignedIn = user.lastSignedIn; }
   if (user.role !== undefined) { values.role = user.role; updateSet.role = user.role; }
-  else if (user.openId === ENV.ownerOpenId) { values.role = 'admin'; updateSet.role = 'admin'; }
+  else if (user.openId === ENV.ownerOpenId) { values.role = "admin"; updateSet.role = "admin"; }
   values.lastSignedIn ??= new Date();
   if (!Object.keys(updateSet).length) updateSet.lastSignedIn = new Date();
   await db.insert(users).values(values).onDuplicateKeyUpdate({ set: updateSet });
@@ -54,6 +58,13 @@ export async function listServicesForAdmin() {
   return db.select().from(services).orderBy(desc(services.createdAt));
 }
 
+export async function getPublishedService(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database unavailable");
+  const rows = await db.select().from(services).where(eq(services.id, id)).limit(1);
+  return rows[0]?.published === 1 ? rows[0] : undefined;
+}
+
 export async function createService(input: InsertService) {
   const db = await getDb();
   if (!db) throw new Error("Database unavailable");
@@ -66,7 +77,7 @@ export async function createService(input: InsertService) {
 export async function updateService(id: number, input: Partial<InsertService>) {
   const db = await getDb();
   if (!db) throw new Error("Database unavailable");
-  await db.update(services).set(input).where(eq(services.id, id));
+  await db.update(services).set({ ...input, updatedAt: new Date() }).where(eq(services.id, id));
   const rows = await db.select().from(services).where(eq(services.id, id)).limit(1);
   return rows[0];
 }

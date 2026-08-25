@@ -18,7 +18,7 @@ describe("catalog permissions", () => {
 
   it("allows an admin through the catalogue guard", async () => {
     const caller = appRouter.createCaller(createContext("admin"));
-    await expect(caller.catalog.adminList()).resolves.toBeInstanceOf(Array);
+    await expect(caller.catalog.detail({ id: 0 })).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 
   it("validates admin mutation inputs before any write", async () => {

@@ -105,7 +105,30 @@
 - [x] Ajouter un état vide clair lorsque la recherche ne renvoie aucun produit.
 - [x] Ajouter un bouton WhatsApp flottant global vers le contact officiel.
 - [x] Vérifier la visibilité, l’accessibilité, le responsive et les destinations des liens.
+- [x] Sauvegarder un checkpoint après livraison.
+
+## Migration PostgreSQL et navigation catalogue
+
+- [x] Restaurer le driver MySQL/TiDB comme base active.
+- [x] Restaurer le schéma et les helpers DB MySQL/TiDB.
+- [x] Générer et vérifier la migration PostgreSQL sans opération destructive.
+- [x] Conserver le dossier PostgreSQL autonome et documenter la connexion future.
+- [x] Ajouter le filtre par fourchette de prix.
+- [x] Ajouter le tri par prix croissant et décroissant.
+- [x] Créer une page de détail pour chaque prestation.
+- [x] Ajouter les tests, vérifier le build et le responsive.
+- [x] Ne pas exécuter la migration PostgreSQL sur la base active MySQL/TiDB.
+- [ ] Revalider le catalogue public avec des prestations MySQL/TiDB réelles.
+- [ ] Revalider le filtre min/max, le tri prix et la page détail avec données publiées.
+- [x] Effectuer un contrôle responsive mobile spécifique du catalogue et de la page détail.
 - [ ] Sauvegarder un checkpoint après livraison.
+
+## Base PostgreSQL autonome
+
+- [x] Créer un fichier SQL PostgreSQL séparé de la base active.
+- [x] Documenter les tables, contraintes, index et procédure de connexion ultérieure.
+- [x] Vérifier la syntaxe et l’absence d’opérations destructives.
+- [ ] Sauvegarder un checkpoint postérieur à la création du dossier PostgreSQL autonome.
 
 ## Correction WhatsApp officiel
 

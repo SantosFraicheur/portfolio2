@@ -7,6 +7,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import LegalPage from "./pages/Legal";
+import ServiceDetail from "./pages/ServiceDetail";
 import { AccessRequired, ClientDashboard, InternalArea, LoginPage, internalAreas } from "./pages/Access";
 import { Toaster } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
@@ -36,6 +37,6 @@ function HashRouter() {
   return <Home />;
 }
 
-function Router() { return <Switch><Route path="/login" component={LoginPage} /><Route path="/mentions-legales" component={LegalPage} /><Route component={HashRouter} /></Switch>; }
+function Router() { return <Switch><Route path="/login" component={LoginPage} /><Route path="/mentions-legales" component={LegalPage} /><Route path="/prestation/:id" component={ServiceDetail} /><Route component={HashRouter} /></Switch>; }
 
 export default function App() { return <ErrorBoundary><ThemeProvider defaultTheme="light"><TooltipProvider><Toaster /><Router /><WhatsAppFloat /></TooltipProvider></ThemeProvider></ErrorBoundary>; }

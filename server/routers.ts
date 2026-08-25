@@ -3,7 +3,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, publicProcedure, router } from "./_core/trpc";
-import { createService, deleteService, listPublishedServices, listServicesForAdmin, updateService } from "./db";
+import { createService, deleteService, getPublishedService, listPublishedServices, listServicesForAdmin, updateService } from "./db";
 import { storagePut } from "./storage";
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -44,6 +44,7 @@ export const appRouter = router({
   }),
   catalog: router({
     published: publicProcedure.query(() => listPublishedServices()),
+    detail: publicProcedure.input(z.object({ id: z.number().int().positive() })).query(({ input }) => getPublishedService(input.id)),
     adminList: adminProcedure.query(() => listServicesForAdmin()),
     publish: adminProcedure.input(serviceFields).mutation(async ({ ctx, input }) => {
       let imageKey: string | undefined;
