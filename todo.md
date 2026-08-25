@@ -55,7 +55,7 @@
 - [x] Préparer une stratégie d’assets compatible GitHub, Vercel et Lovable.
 - [x] Remplacer ou sécuriser les références d’images du portfolio.
 - [x] Vérifier que les images répondent correctement dans le preview et le build.
-- [ ] Sauvegarder et synchroniser la correction.
-- [ ] Enregistrer un checkpoint après la correction des assets publics.
-- [ ] Committer, pousser et revalider les changements sur le dépôt public portfolio2.
+- [x] Sauvegarder et synchroniser la correction.
+- [x] Enregistrer un checkpoint après la correction des assets publics.
+- [x] Committer, pousser et revalider les changements sur le dépôt public portfolio2.
 
