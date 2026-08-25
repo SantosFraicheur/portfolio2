@@ -114,6 +114,10 @@ export default function Home() {
             <p className="eyebrow"><span className="eyebrow-line" /> METCHRI Jérôme Serge · étudiant MIA 2</p>
             <h1 id="hero-title">Des interfaces qui<br /><em>savent</em> pourquoi<br />elles existent.</h1>
             <p className="hero-intro">Je suis METCHRI Jérôme Serge, étudiant en MIA 2 à l’UAC au Bénin. Je conçois et construis des expériences numériques où la direction artistique, la clarté produit et la fiabilité technique avancent ensemble.</p>
+            <div className="profile-card" aria-label="Informations personnelles de METCHRI Jérôme Serge">
+              <img className="profile-portrait" src="/manus-storage/metchri-jerome-serge_98c8ef04.webp" alt="Portrait de METCHRI Jérôme Serge" />
+              <div><span className="profile-label">Profil</span><strong>METCHRI Jérôme Serge</strong><small>Étudiant en MIA 2 · UAC Bénin</small></div>
+            </div>
             <a href="#work" className="text-link">Voir les projets <ArrowDownRight size={17} /></a>
           </div>
           <div className="hero-visual" data-reveal>
