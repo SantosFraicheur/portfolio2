@@ -61,3 +61,23 @@
 - [x] Ajouter l’animation de confirmation d’envoi.
 - [x] Valider le responsive, l’accessibilité et le build.
 - [x] Sauvegarder un checkpoint après livraison.
+
+## Catalogue full-stack administrable
+
+- [x] Activer le mode full-stack avec base de données, authentification et stockage sécurisé.
+- [x] Créer le schéma de données des prestations avec image, prix, description, catégorie et auteur.
+- [x] Générer et appliquer la migration de base de données.
+- [x] Ajouter les procédures publiques et admin protégées pour consulter, publier, modifier et retirer les prestations.
+- [x] Ajouter le téléversement sécurisé des images avec validation de type et de taille.
+- [x] Remplacer le catalogue localStorage de l’espace admin par les mutations backend.
+- [x] Synchroniser le catalogue public avec la base de données.
+- [x] Tester les permissions, les états de chargement/erreur, le build et le responsive.
+- [x] Sauvegarder un checkpoint après livraison.
+
+## Corrections de sécurisation full-stack
+
+- [x] Supprimer le contournement sessionStorage de démonstration dans les accès client et admin.
+- [x] Finaliser la connexion OAuth réelle dans le formulaire d’accès.
+- [x] Ajouter la procédure d’édition d’une prestation côté serveur et dans l’espace admin.
+- [x] Ajouter les tests explicites des permissions admin et utilisateur.
+- [x] Revalider le responsive du formulaire admin et du catalogue public.

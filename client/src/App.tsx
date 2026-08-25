@@ -1,4 +1,5 @@
 // MKS Service — routeur public et espaces privés de démonstration par hash. Les permissions réelles doivent être validées côté serveur.
+import { useAuth } from "@/_core/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Route, Switch } from "wouter";
@@ -10,10 +11,10 @@ import { Toaster } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
 
 function ClientGate() {
-  const [session, setSession] = useState(() => sessionStorage.getItem("mks-client-session") === "demo");
-  useEffect(() => { const update = () => setSession(sessionStorage.getItem("mks-client-session") === "demo"); window.addEventListener("storage", update); window.addEventListener("hashchange", update); return () => { window.removeEventListener("storage", update); window.removeEventListener("hashchange", update); }; }, []);
-  if (!session) return <section className="client-login-required"><div><div className="public-kicker">ESPACE CLIENT · ACCÈS RÉSERVÉ</div><h1>Connectez-vous<br /><em>pour continuer.</em></h1><p>Votre espace client est disponible après authentification.</p><a className="primary-action" href="/login">Se connecter <ArrowRight size={16} /></a><a className="back-public-link" href="/#top">Retour au site public</a></div></section>;
-  return <div data-client-gate="demo"><ClientDashboard onLogout={() => { sessionStorage.removeItem("mks-client-session"); sessionStorage.removeItem("mks-pending-quote"); window.location.href = "/"; }} /></div>;
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return <section className="client-login-required"><div><div className="public-kicker">ESPACE CLIENT · VÉRIFICATION</div><h1>Vérification<br /><em>de votre session.</em></h1></div></section>;
+  if (!isAuthenticated) return <section className="client-login-required"><div><div className="public-kicker">ESPACE CLIENT · ACCÈS RÉSERVÉ</div><h1>Connectez-vous<br /><em>pour continuer.</em></h1><p>Votre espace client est disponible après authentification.</p><a className="primary-action" href="/login">Se connecter <ArrowRight size={16} /></a><a className="back-public-link" href="/#top">Retour au site public</a></div></section>;
+  return <div data-client-gate="authenticated"><ClientDashboard onLogout={() => { sessionStorage.removeItem("mks-client-session"); sessionStorage.removeItem("mks-pending-quote"); window.location.href = "/"; }} /></div>;
 }
 
 function ClientPanel({ onLogout }: { onLogout: () => void }) {
@@ -22,11 +23,13 @@ function ClientPanel({ onLogout }: { onLogout: () => void }) {
 }
 
 function HashRouter() {
+  const { user, isAuthenticated, loading } = useAuth();
   const [hash, setHash] = useState(window.location.hash.toLowerCase());
   useEffect(() => { const update = () => setHash(window.location.hash.toLowerCase()); window.addEventListener("hashchange", update); return () => window.removeEventListener("hashchange", update); }, []);
   const area = internalAreas.find((item) => item.hash === hash);
+  if (loading) return <section className="client-login-required"><div><div className="public-kicker">MKS SERVICE · CHARGEMENT</div><h1>Préparation<br /><em>de votre espace.</em></h1></div></section>;
   if (hash === "#client" || hash.startsWith("#client-")) return <ClientGate />;
-  if (area) return sessionStorage.getItem("mks-client-session") === "demo" ? <InternalArea area={area} /> : <AccessRequired area={area.name} />;
+  if (area) { const needsAdmin = area.name.startsWith("Admin") || area.name.startsWith("Responsable"); const allowed = isAuthenticated && (!needsAdmin || user?.role === "admin"); return allowed ? <InternalArea area={area} /> : <AccessRequired area={needsAdmin ? `${area.name} · rôle admin requis` : area.name} />; }
   return <Home />;
 }
 
