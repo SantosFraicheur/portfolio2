@@ -82,6 +82,19 @@
 - [x] Corriger la génération des options de filtres pour la cible TypeScript du projet.
 - [x] Tester les interactions, le responsive, le thème réduit et le build.
 - [x] Sauvegarder et livrer la version améliorée.
+
+## Toast de confirmation du formulaire
+
+- [x] Ajouter un toast visuel après une soumission réussie.
+- [x] Rendre le toast accessible avec rôle, durée contrôlée et fermeture manuelle.
+- [x] Tester le toast avec le formulaire, sur mobile et sur ordinateur.
+- [x] Vérifier explicitement le rôle ARIA et l’annonce du toast dans le DOM rendu.
+- [x] Tester la présence et le fonctionnement du bouton de fermeture du toast.
+- [x] Faire un contrôle visuel desktop après soumission réussie.
+- [x] Éviter le chevauchement entre le toast et le bouton de retour en haut.
+- [x] Comparer automatiquement les bounding boxes du toast et du bouton Haut sur desktop.
+- [x] Consigner une capture desktop post-soumission sans superposition avant le checkpoint.
+- [ ] Sauvegarder et synchroniser la modification.
 - [x] Enregistrer un checkpoint après la correction des assets publics.
 - [x] Committer, pousser et revalider les changements sur le dépôt public portfolio2.
 

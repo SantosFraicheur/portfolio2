@@ -5,8 +5,9 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import Home from "./pages/Home";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { Toaster } from "./components/ui/sonner";
 
-const renderHome = () => render(<ThemeProvider defaultTheme="light" switchable><Home /></ThemeProvider>);
+const renderHome = () => render(<ThemeProvider defaultTheme="light" switchable><Toaster /><Home /></ThemeProvider>);
 
 class TestIntersectionObserver {
   observe() {}
@@ -111,8 +112,15 @@ describe("interactions responsive du portfolio", () => {
     await user.type(screen.getByRole("textbox", { name: "Message" }), "Bonjour, je souhaite échanger sur un projet web.");
     await user.click(screen.getByRole("button", { name: "Envoyer le message" }));
 
-    await waitFor(() => expect(screen.getByText("Votre message a bien été transmis.")).toBeTruthy());
+    await waitFor(() => {
+      expect(screen.getByText("Votre message a bien été transmis.")).toBeTruthy();
+      expect(screen.getByText("Message envoyé")).toBeTruthy();
+      const notificationRegion = screen.getByRole("region", { name: /Notifications/i });
+      expect(notificationRegion.getAttribute("aria-live")).toBe("polite");
+    });
     expect(fetchSpy).toHaveBeenCalledWith("/api/contact", expect.objectContaining({ method: "POST" }));
+    await user.click(screen.getByRole("button", { name: "Close toast" }));
+    await waitFor(() => expect(screen.queryByText("Message envoyé")).toBeNull());
   });
 
   it("affiche le retour en haut après défilement et le rend activable", () => {

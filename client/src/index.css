@@ -195,6 +195,8 @@ h1 em, h2 em { color: var(--laurel); font-style: italic; }
 .form-note { max-width: 320px; margin: 0; opacity: .72; font-size: 11px; line-height: 1.5; }
 .form-success { display: flex; align-items: center; gap: 8px; margin: 20px 0 0; color: var(--paper); font-size: 13px; }
 .form-error { margin: 20px 0 0; color: #ffd0c1; font-size: 13px; line-height: 1.6; }.form-error a { color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }
+[data-sonner-toaster][data-y-position="bottom"] { bottom: 96px !important; }
+@media (max-width: 640px) { [data-sonner-toaster][data-y-position="bottom"] { bottom: 84px !important; left: 12px !important; right: 12px !important; width: auto !important; } }
 .contact-submit:disabled { cursor: wait; opacity: .68; transform: none; }
 .site-footer { background: var(--ink); color: var(--paper); display: flex; justify-content: space-between; gap: 20px; padding: 22px clamp(26px, 8vw, 145px); font: 9px 'IBM Plex Mono', monospace; text-transform: uppercase; letter-spacing: .08em; }.site-footer a { display: inline-flex; gap: 6px; align-items: center; color: #b8cabb; }
 

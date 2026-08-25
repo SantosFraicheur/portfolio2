@@ -17,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
+import { toast } from "sonner";
 
 const ASSETS = {
   hero: "/assets/portfolio/portfolio-hero-editorial.webp",
@@ -152,6 +153,11 @@ export default function Home() {
         return;
       }
       setFormSent(true);
+      toast.success("Message envoyé", {
+        description: "Merci pour votre message. Je reviendrai vers vous rapidement.",
+        duration: 5000,
+        closeButton: true,
+      });
       setContactForm({ name: "", email: "", subject: "", message: "" });
     } catch {
       setFormServerError("Le service est indisponible. Vous pouvez utiliser l’e-mail de secours ci-dessous.");
