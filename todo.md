@@ -81,3 +81,10 @@
 - [x] Ajouter la procédure d’édition d’une prestation côté serveur et dans l’espace admin.
 - [x] Ajouter les tests explicites des permissions admin et utilisateur.
 - [x] Revalider le responsive du formulaire admin et du catalogue public.
+
+## Informations officielles de l’entreprise
+
+- [x] Ajouter MKS SERVICE, Bénin · Cotonou, téléphone et e-mail dans le pied de page.
+- [x] Ajouter une section structurée d’informations d’entreprise sans inventer d’IFU ou de RCCM.
+- [x] Vérifier le rendu desktop/mobile et le build.
+- [ ] Sauvegarder un checkpoint après livraison.
