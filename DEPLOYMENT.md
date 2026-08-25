@@ -22,4 +22,4 @@ Le bouton CV utilise un asset persistant généré après validation du document
 
 ## Vérifications avant publication
 
-Exécuter `pnpm check` puis `pnpm build`. Vérifier la page d’accueil, les routes client-side, le téléchargement du CV, le lien WhatsApp et le lien GitHub. Le profil GitHub personnel doit être renseigné avant publication du lien définitif ; le lien actuel ouvre GitHub de manière générique en attendant cette information.
+Exécuter `pnpm check` puis `pnpm build`. Vérifier la page d’accueil, les routes client-side, le téléchargement du CV, le lien WhatsApp et le lien GitHub. Le profil GitHub public utilisé par le portfolio est `https://github.com/SantosFraicheur`. Le dépôt du projet est `https://github.com/SantosFraicheur/portfolio2`.

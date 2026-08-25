@@ -92,7 +92,7 @@ export default function Home() {
       <aside className="side-rail">
         <a href="#top" className="brand-lockup" aria-label="Retour en haut">
           <img src={ASSETS.mark} alt="" className="brand-mark" />
-          <span className="brand-name">Metchri<br />/ Studio</span>
+          <span className="brand-name">METCHRI<br />/ PORTFOLIO</span>
         </a>
         <span className="rail-index">Portfolio · 2026</span>
         <a className="rail-email" href="mailto:sergemetchri@gmail.com">sergemetchri@<br />gmail.com</a>
@@ -100,7 +100,7 @@ export default function Home() {
 
       <div className="page-content" id="top">
         <header className="topbar">
-          <a href="#top" className="mobile-brand"><img src={ASSETS.mark} alt="" /> <span>Metchri / Studio</span></a>
+          <a href="#top" className="mobile-brand"><img src={ASSETS.mark} alt="" /> <span>METCHRI / PORTFOLIO</span></a>
           <nav className={`main-nav ${menuOpen ? "open" : ""}`} aria-label="Navigation principale">
             <a href="#work" onClick={closeMenu}>Projets <span>01</span></a>
             <a href="#approach" onClick={closeMenu}>Approche <span>02</span></a>
@@ -116,13 +116,13 @@ export default function Home() {
           <div className="hero-copy" data-reveal>
             <p className="eyebrow"><span className="eyebrow-line" /> METCHRI Jérôme Serge · étudiant MIA 2</p>
             <h1 id="hero-title">Des interfaces qui<br /><em>savent</em> pourquoi<br />elles existent.</h1>
-            <p className="hero-intro">Je suis METCHRI Jérôme Serge, étudiant en MIA 2 à l’UAC au Bénin. Je conçois et construis des expériences numériques où la direction artistique, la clarté produit et la fiabilité technique avancent ensemble.</p>
+            <p className="hero-intro">Je suis METCHRI Jérôme Serge, développeur web full-stack et étudiant en Licence MIA 2 à l’UAC au Bénin. Je conçois et développe des applications web complètes, de l’interface à l’API, avec une attention particulière portée à la clarté, à la sécurité et à la fiabilité.</p>
             <div className="profile-card" aria-label="Informations personnelles de METCHRI Jérôme Serge">
               <img className="profile-portrait" src="/manus-storage/metchri-jerome-serge_98c8ef04.webp" alt="Portrait de METCHRI Jérôme Serge" />
               <div><span className="profile-label">Profil</span><strong>METCHRI Jérôme Serge</strong><small>Étudiant en Licence MIA 2 · UAC Bénin</small></div>
               <div className="profile-socials" aria-label="Réseaux sociaux et contact">
                 <a className="profile-social whatsapp" href="https://wa.me/2290195162664" target="_blank" rel="noreferrer" aria-label="Contacter METCHRI Jérôme Serge sur WhatsApp" title="WhatsApp"><MessageCircle size={16} /></a>
-                <a className="profile-social github" href="https://github.com/" target="_blank" rel="noreferrer" aria-label="Ouvrir GitHub — profil à renseigner" title="GitHub — profil à renseigner"><Github size={16} /></a>
+                <a className="profile-social github" href="https://github.com/SantosFraicheur" target="_blank" rel="noreferrer" aria-label="Ouvrir le profil GitHub de METCHRI Jérôme Serge" title="GitHub"><Github size={16} /></a>
               </div>
             </div>
             <a className="cv-download" href="/manus-storage/cv-metchri-jerome-serge_3adfd226.pdf" target="_blank" rel="noreferrer" download="CV-METCHRI-Jerome-Serge.pdf"><Download size={15} /> Télécharger mon CV</a>
