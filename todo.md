@@ -48,3 +48,14 @@
 - [x] Tester explicitement la navigation au clavier et le comportement en mouvement réduit.
 - [x] Ajouter un test d’interaction réel couvrant les éléments focusables du portfolio.
 - [x] Vérifier le comportement effectif des animations avec la préférence mouvement réduit.
+
+## Images accessibles depuis les liens publics
+
+- [x] Auditer toutes les références `/manus-storage/` et les fichiers sources disponibles.
+- [x] Préparer une stratégie d’assets compatible GitHub, Vercel et Lovable.
+- [x] Remplacer ou sécuriser les références d’images du portfolio.
+- [x] Vérifier que les images répondent correctement dans le preview et le build.
+- [ ] Sauvegarder et synchroniser la correction.
+- [ ] Enregistrer un checkpoint après la correction des assets publics.
+- [ ] Committer, pousser et revalider les changements sur le dépôt public portfolio2.
+

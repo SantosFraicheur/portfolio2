@@ -10,7 +10,7 @@ Dans Vercel, importer le dépôt GitHub, laisser le framework `Vite` détecté, 
 - Output directory : `dist/public`
 - Install command : `pnpm install --frozen-lockfile`
 
-Le portfolio actuel utilise des assets persistants référencés par leurs chemins `/manus-storage/...`. Pour un déploiement indépendant de Manus, ces assets devront être remplacés par des fichiers hébergés sur un stockage public ou par le système d’assets de la plateforme cible.
+Les images, le logo et le CV sont inclus dans `client/public/assets/portfolio/` et référencés avec des chemins publics relatifs comme `/assets/portfolio/portfolio-hero-editorial.webp`. Ils sont donc versionnés avec le dépôt et ne dépendent pas d’un stockage interne Manus.
 
 ## Lovable
 
@@ -18,8 +18,8 @@ Lovable peut importer directement le dépôt GitHub et reconnaître la structure
 
 ## CV
 
-Le bouton CV utilise un asset persistant généré après validation du document. Si le projet est déployé hors de Manus, remplacer le chemin `/manus-storage/...pdf` par l’URL publique du PDF hébergé sur la plateforme cible.
+Le bouton CV utilise le fichier public `client/public/assets/portfolio/cv-metchri-jerome-serge.pdf`. Aucun remplacement d’URL n’est nécessaire après import sur Vercel ou Lovable.
 
 ## Vérifications avant publication
 
-Exécuter `pnpm check` puis `pnpm build`. Vérifier la page d’accueil, les routes client-side, le téléchargement du CV, le lien WhatsApp et le lien GitHub. Le profil GitHub public utilisé par le portfolio est `https://github.com/SantosFraicheur`. Le dépôt du projet est `https://github.com/SantosFraicheur/portfolio2`.
+Exécuter `pnpm check`, `pnpm test` puis `pnpm build`. Vérifier également que les URLs `/assets/portfolio/*.webp`, `/assets/portfolio/laurel-mark.svg` et `/assets/portfolio/cv-metchri-jerome-serge.pdf` répondent avec un statut HTTP 200. Vérifier la page d’accueil, les routes client-side, le téléchargement du CV, le lien WhatsApp et le lien GitHub. Le profil GitHub public utilisé par le portfolio est `https://github.com/SantosFraicheur`. Le dépôt du projet est `https://github.com/SantosFraicheur/portfolio2`.

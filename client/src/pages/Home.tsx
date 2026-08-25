@@ -15,11 +15,11 @@ import {
 } from "lucide-react";
 
 const ASSETS = {
-  hero: "/manus-storage/portfolio-hero-editorial_b042cab1.jpg",
-  lumiere: "/manus-storage/project-lumiere-parfums_4df234e3.jpg",
-  commerce: "/manus-storage/project-commerce-interface_0798988f.jpg",
-  automation: "/manus-storage/project-automation-studio_ef985700.jpg",
-  mark: "/manus-storage/laurel-mark_229594d0.png",
+  hero: "/assets/portfolio/portfolio-hero-editorial.webp",
+  lumiere: "/assets/portfolio/project-lumiere-parfums.webp",
+  commerce: "/assets/portfolio/project-commerce-interface.webp",
+  automation: "/assets/portfolio/project-automation-studio.webp",
+  mark: "/assets/portfolio/laurel-mark.svg",
 };
 
 type Project = {
@@ -118,14 +118,14 @@ export default function Home() {
             <h1 id="hero-title">Des interfaces qui<br /><em>savent</em> pourquoi<br />elles existent.</h1>
             <p className="hero-intro">Je suis METCHRI Jérôme Serge, développeur web full-stack et étudiant en Licence MIA 2 à l’UAC au Bénin. Je conçois et développe des applications web complètes, de l’interface à l’API, avec une attention particulière portée à la clarté, à la sécurité et à la fiabilité.</p>
             <div className="profile-card" aria-label="Informations personnelles de METCHRI Jérôme Serge">
-              <img className="profile-portrait" src="/manus-storage/metchri-jerome-serge_98c8ef04.webp" alt="Portrait de METCHRI Jérôme Serge" />
+              <img className="profile-portrait" src="/assets/portfolio/metchri-jerome-serge.webp" alt="Portrait de METCHRI Jérôme Serge" />
               <div><span className="profile-label">Profil</span><strong>METCHRI Jérôme Serge</strong><small>Étudiant en Licence MIA 2 · UAC Bénin</small></div>
               <div className="profile-socials" aria-label="Réseaux sociaux et contact">
                 <a className="profile-social whatsapp" href="https://wa.me/2290195162664" target="_blank" rel="noreferrer" aria-label="Contacter METCHRI Jérôme Serge sur WhatsApp" title="WhatsApp"><MessageCircle size={16} /></a>
                 <a className="profile-social github" href="https://github.com/SantosFraicheur" target="_blank" rel="noreferrer" aria-label="Ouvrir le profil GitHub de METCHRI Jérôme Serge" title="GitHub"><Github size={16} /></a>
               </div>
             </div>
-            <a className="cv-download" href="/manus-storage/cv-metchri-jerome-serge_3adfd226.pdf" target="_blank" rel="noreferrer" download="CV-METCHRI-Jerome-Serge.pdf"><Download size={15} /> Télécharger mon CV</a>
+            <a className="cv-download" href="/assets/portfolio/cv-metchri-jerome-serge.pdf" target="_blank" rel="noreferrer" download="CV-METCHRI-Jerome-Serge.pdf"><Download size={15} /> Télécharger mon CV</a>
             <a href="#work" className="text-link">Voir les projets <ArrowDownRight size={17} /></a>
           </div>
           <div className="hero-visual" data-reveal>
