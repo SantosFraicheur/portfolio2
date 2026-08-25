@@ -36,3 +36,15 @@
 - [x] Valider le build de production.
 - [x] Vérifier le rendu desktop et mobile.
 - [x] Enregistrer le prochain checkpoint après la synchronisation GitHub.
+
+## Compatibilité téléphone et ordinateur
+
+- [x] Vérifier le rendu final à 320, 375, 390, 768, 1024 et 1280 px.
+- [x] Corriger les débordements horizontaux et la lisibilité des sections sur mobile.
+- [x] Rendre le menu mobile, les boutons, le CV et les liens sociaux confortables au toucher.
+- [x] Vérifier les parcours clavier et les préférences de mouvement réduit.
+- [x] Relancer les tests et le build après les corrections responsive.
+- [x] Refaire la capture finale à 375 px après les dernières corrections.
+- [x] Tester explicitement la navigation au clavier et le comportement en mouvement réduit.
+- [x] Ajouter un test d’interaction réel couvrant les éléments focusables du portfolio.
+- [x] Vérifier le comportement effectif des animations avec la préférence mouvement réduit.
