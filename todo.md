@@ -67,6 +67,21 @@
 - [x] Tester les interactions, le build et le rendu responsive après les changements.
 - [x] Garantir le chargement du visuel projet principal sur mobile avant le contrôle d’affichage.
 - [x] Prendre une capture finale à 375 px après les changements d’animations et d’images.
+
+## Thème, contact et filtrage avancé
+
+- [x] Auditer le thème actuel et les données de projets.
+- [x] Ajouter un bouton clair/sombre avec persistance, contraste et libellés accessibles.
+- [x] Ajouter un formulaire de contact fonctionnel avec validation des champs et message de confirmation.
+- [x] Implémenter un endpoint backend de contact avec validation, limitation et notification propriétaire.
+- [x] Rendre l’endpoint `/api/contact` disponible dans le serveur de développement et le runtime de production.
+- [x] Ajouter les états de chargement et d’erreur du formulaire avec un fallback e-mail explicite.
+- [x] Mettre à jour le test d’interface pour le nouveau libellé d’envoi du formulaire.
+
+- [x] Ajouter le filtrage des projets par catégorie et technologie.
+- [x] Corriger la génération des options de filtres pour la cible TypeScript du projet.
+- [x] Tester les interactions, le responsive, le thème réduit et le build.
+- [x] Sauvegarder et livrer la version améliorée.
 - [x] Enregistrer un checkpoint après la correction des assets publics.
 - [x] Committer, pousser et revalider les changements sur le dépôt public portfolio2.
 

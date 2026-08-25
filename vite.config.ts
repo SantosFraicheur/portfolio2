@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
+import { createContactHandler } from "./server/contact";
 
 // =============================================================================
 // Manus Debug Collector - Vite Plugin
@@ -150,6 +151,42 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
+function vitePluginContact(): Plugin {
+  const contactHandler = createContactHandler();
+  return {
+    name: "portfolio-contact-api",
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use("/api/contact", (req, res, next) => {
+        if (req.method !== "POST") {
+          next();
+          return;
+        }
+
+        let body = "";
+        let tooLarge = false;
+        req.on("data", (chunk) => {
+          body += chunk.toString();
+          if (body.length > 16_384) tooLarge = true;
+        });
+        req.on("end", async () => {
+          if (tooLarge) {
+            res.writeHead(413, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ ok: false, message: "Requête trop volumineuse." }));
+            return;
+          }
+          try {
+            const payload = JSON.parse(body || "{}");
+            await contactHandler({ body: payload, ip: req.socket.remoteAddress }, res as any);
+          } catch {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ ok: false, message: "Requête JSON invalide." }));
+          }
+        });
+      });
+    },
+  };
+}
+
 function vitePluginStorageProxy(): Plugin {
   return {
     name: "manus-storage-proxy",
@@ -203,7 +240,7 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginContact(), vitePluginStorageProxy()];
 
 export default defineConfig({
   plugins,

@@ -12,8 +12,11 @@ import {
   Mail,
   MessageCircle,
   Menu,
+  Moon,
+  Sun,
   X,
 } from "lucide-react";
+import { useTheme } from "../contexts/ThemeContext";
 
 const ASSETS = {
   hero: "/assets/portfolio/portfolio-hero-editorial.webp",
@@ -60,16 +63,28 @@ const expertise = [
 ];
 
 export default function Home() {
+  const { theme, toggleTheme } = useTheme();
   const [activeFilter, setActiveFilter] = useState("Tous");
+  const [categoryFilter, setCategoryFilter] = useState("Toutes");
+  const [technologyFilter, setTechnologyFilter] = useState("Toutes");
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [contactForm, setContactForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [formSent, setFormSent] = useState(false);
+  const [formSubmitting, setFormSubmitting] = useState(false);
+  const [formServerError, setFormServerError] = useState("");
   const filters = ["Tous", "Réalisé"];
+  const categories = useMemo(() => ["Toutes", ...Array.from(new Set(projects.map((project) => project.category)))], []);
+  const technologies = useMemo(() => ["Toutes", ...Array.from(new Set(projects.flatMap((project) => project.tags)))], []);
 
-  const filteredProjects = useMemo(() => {
-    if (activeFilter === "Tous") return projects;
-    return projects.filter((project) => project.status === "réalisé");
-  }, [activeFilter]);
+  const filteredProjects = useMemo(() => projects.filter((project) => {
+    const matchesStatus = activeFilter === "Tous" || project.status === "réalisé";
+    const matchesCategory = categoryFilter === "Toutes" || project.category === categoryFilter;
+    const matchesTechnology = technologyFilter === "Toutes" || project.tags.includes(technologyFilter);
+    return matchesStatus && matchesCategory && matchesTechnology;
+  }), [activeFilter, categoryFilter, technologyFilter]);
 
   useEffect(() => {
     const revealItems = document.querySelectorAll<HTMLElement>("[data-reveal]");
@@ -100,6 +115,51 @@ export default function Home() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const updateContactField = (field: keyof typeof contactForm, value: string) => {
+    setContactForm((current) => ({ ...current, [field]: value }));
+    setFormErrors((current) => ({ ...current, [field]: "" }));
+    setFormSent(false);
+    setFormServerError("");
+  };
+
+  const validateContactForm = () => {
+    const errors: Record<string, string> = {};
+    if (contactForm.name.trim().length < 2) errors.name = "Indiquez votre nom.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email.trim())) errors.email = "Indiquez une adresse e-mail valide.";
+    if (contactForm.subject.trim().length < 3) errors.subject = "Ajoutez un objet à votre message.";
+    if (contactForm.message.trim().length < 20) errors.message = "Votre message doit contenir au moins 20 caractères.";
+    return errors;
+  };
+
+  const submitContactForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const errors = validateContactForm();
+    setFormErrors(errors);
+    setFormServerError("");
+    setFormSent(false);
+    if (Object.keys(errors).length > 0) return;
+
+    setFormSubmitting(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(contactForm),
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setFormServerError(payload.message || "Impossible d’envoyer le message pour le moment.");
+        return;
+      }
+      setFormSent(true);
+      setContactForm({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      setFormServerError("Le service est indisponible. Vous pouvez utiliser l’e-mail de secours ci-dessous.");
+    } finally {
+      setFormSubmitting(false);
+    }
+  };
+
   const scrollToTop = () => {
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
@@ -124,6 +184,9 @@ export default function Home() {
             <a href="#approach" onClick={closeMenu}>Approche <span>02</span></a>
             <a href="#contact" onClick={closeMenu}>Contact <span>03</span></a>
           </nav>
+          <button className="theme-toggle" type="button" onClick={toggleTheme} aria-pressed={theme === "dark"} aria-label={theme === "dark" ? "Activer le mode clair" : "Activer le mode sombre"} title={theme === "dark" ? "Passer au mode clair" : "Passer au mode sombre"}>
+            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}<span>{theme === "dark" ? "Clair" : "Sombre"}</span>
+          </button>
           <a className="top-availability" href="#contact">Disponible pour un projet <span className="availability-dot" /></a>
           <button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-controls="primary-navigation" aria-expanded={menuOpen} aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}>
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -169,11 +232,24 @@ export default function Home() {
         <section className="work-section" id="work" aria-labelledby="work-title">
           <div className="section-heading" data-reveal>
             <div><p className="eyebrow"><span className="eyebrow-line" /> Sélection de travaux</p><h2 id="work-title">Projets<br /><em>réalisés</em></h2></div>
-            <div className="section-heading-meta"><span>Une archive en mouvement</span><span>01 entrée publiée</span></div>
+            <div className="section-heading-meta"><span>Une archive en mouvement</span><span>{String(filteredProjects.length).padStart(2, "0")} entrée{filteredProjects.length > 1 ? "s" : ""} publiée{filteredProjects.length > 1 ? "s" : ""}</span></div>
           </div>
-          <div className="filter-row" role="tablist" aria-label="Filtrer les projets">
-            {filters.map((filter) => <button key={filter} className={activeFilter === filter ? "filter active" : "filter"} onClick={() => setActiveFilter(filter)} role="tab" aria-selected={activeFilter === filter}>{filter}</button>)}
+          <div className="filter-controls" aria-label="Filtres des projets">
+            <div className="filter-row" role="tablist" aria-label="Filtrer par statut">
+              {filters.map((filter) => <button key={filter} className={activeFilter === filter ? "filter active" : "filter"} onClick={() => setActiveFilter(filter)} role="tab" aria-selected={activeFilter === filter}>{filter}</button>)}
+            </div>
+            <label className="filter-select">Catégorie
+              <select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)} aria-label="Filtrer par catégorie">
+                {categories.map((category) => <option key={category} value={category}>{category}</option>)}
+              </select>
+            </label>
+            <label className="filter-select">Technologie
+              <select value={technologyFilter} onChange={(event) => setTechnologyFilter(event.target.value)} aria-label="Filtrer par technologie">
+                {technologies.map((technology) => <option key={technology} value={technology}>{technology}</option>)}
+              </select>
+            </label>
           </div>
+          <p className="filter-results" aria-live="polite">{filteredProjects.length} projet{filteredProjects.length > 1 ? "s" : ""} affiché{filteredProjects.length > 1 ? "s" : ""}</p>
           <div className="project-list">
             {filteredProjects.map((project, index) => (
               <article className={`project-row ${project.featured ? "featured" : ""}`} key={project.id} data-reveal="project" style={{ "--delay": `${index * 70}ms` } as React.CSSProperties}>
@@ -212,6 +288,29 @@ export default function Home() {
           <h2>Un projet à<br /><em>mettre au monde ?</em></h2>
           <p className="contact-intro">Un produit, une refonte ou une idée encore en notes. Écrivez-moi ce que vous cherchez à rendre plus clair, plus beau ou plus fiable. Je suis joignable par e-mail ou sur WhatsApp.</p>
           <div className="contact-actions"><a className="contact-button" href="mailto:sergemetchri@gmail.com">Écrire un message <Mail size={17} /></a><a className="whatsapp-button" href="https://wa.me/2290195162664" target="_blank" rel="noreferrer">WhatsApp · 0195162664 <ExternalLink size={16} /></a><button className="copy-button" onClick={copyEmail}>{copied ? <><Check size={16} /> Adresse copiée</> : <><Copy size={16} /> Copier l’adresse</>}</button></div>
+          <form className="contact-form" onSubmit={submitContactForm} noValidate aria-label="Formulaire de contact">
+            <div className="contact-form-grid">
+              <label className="contact-field">Nom
+                <input name="name" required minLength={2} value={contactForm.name} onChange={(event) => updateContactField("name", event.target.value)} aria-invalid={Boolean(formErrors.name)} aria-describedby={formErrors.name ? "contact-name-error" : undefined} autoComplete="name" />
+                {formErrors.name && <span id="contact-name-error" className="field-error">{formErrors.name}</span>}
+              </label>
+              <label className="contact-field">E-mail
+                <input name="email" type="email" required value={contactForm.email} onChange={(event) => updateContactField("email", event.target.value)} aria-invalid={Boolean(formErrors.email)} aria-describedby={formErrors.email ? "contact-email-error" : undefined} autoComplete="email" />
+                {formErrors.email && <span id="contact-email-error" className="field-error">{formErrors.email}</span>}
+              </label>
+            </div>
+            <label className="contact-field">Objet
+              <input name="subject" required minLength={3} value={contactForm.subject} onChange={(event) => updateContactField("subject", event.target.value)} aria-invalid={Boolean(formErrors.subject)} aria-describedby={formErrors.subject ? "contact-subject-error" : undefined} />
+              {formErrors.subject && <span id="contact-subject-error" className="field-error">{formErrors.subject}</span>}
+            </label>
+            <label className="contact-field">Message
+              <textarea name="message" rows={5} required minLength={20} value={contactForm.message} onChange={(event) => updateContactField("message", event.target.value)} aria-invalid={Boolean(formErrors.message)} aria-describedby={formErrors.message ? "contact-message-error" : undefined} />
+              {formErrors.message && <span id="contact-message-error" className="field-error">{formErrors.message}</span>}
+            </label>
+            <div className="contact-form-footer"><button className="contact-submit" type="submit" disabled={formSubmitting}>{formSubmitting ? "Envoi en cours…" : <>Envoyer le message <Mail size={16} /></>}</button><p className="form-note">Votre message est transmis de façon sécurisée. Une adresse e-mail de secours est disponible si nécessaire.</p></div>
+            {formSent && <p className="form-success" role="status"><Check size={16} /> Votre message a bien été transmis.</p>}
+            {formServerError && <p className="form-error" role="alert">{formServerError} <a href="mailto:sergemetchri@gmail.com">Utiliser l’e-mail de secours</a>.</p>}
+          </form>
         </section>
 
         <footer className="site-footer"><span>© 2026 — METCHRI Jérôme Serge</span><span>Conçu et construit avec attention</span><a href="#top">Retour en haut <ArrowUpRight size={14} /></a></footer>
