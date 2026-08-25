@@ -1,82 +1,191 @@
-// MKS Service — portail public connecté au catalogue persistant.
-import { useAuth } from "@/_core/hooks/useAuth";
-import { ArrowRight, Building2, CheckCircle2, ChevronRight, Clock3, FileText, HardHat, Mail, Menu, Phone, Search, ShieldCheck, Users, WalletCards, X } from "lucide-react";
-import { FormEvent, useEffect, useState } from "react";
-import { trpc } from "../lib/trpc";
-import type { ServiceItem } from "../lib/catalog";
+// Atelier éditorial — page portfolio : asymétrie calme, preuves de travail, vert laurier #587A68.
+import { useEffect, useMemo, useState } from "react";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  Check,
+  Copy,
+  ExternalLink,
+  Mail,
+  Menu,
+  X,
+} from "lucide-react";
 
-const services = [
-  { title: "Construction & BTP", text: "Des équipes coordonnées pour vos projets, de l’étude à la livraison.", icon: HardHat, color: "blue" },
-  { title: "Immobilier & vente", text: "Un accompagnement clair pour gérer, vendre et suivre vos opérations.", icon: Building2, color: "orange" },
-  { title: "Entretien & sécurité", text: "Des services réguliers, documentés et adaptés à vos exigences.", icon: ShieldCheck, color: "green" },
+const ASSETS = {
+  hero: "/manus-storage/portfolio-hero-editorial_b042cab1.jpg",
+  lumiere: "/manus-storage/project-lumiere-parfums_4df234e3.jpg",
+  commerce: "/manus-storage/project-commerce-interface_0798988f.jpg",
+  automation: "/manus-storage/project-automation-studio_ef985700.jpg",
+  mark: "/manus-storage/laurel-mark_229594d0.png",
+};
+
+type Project = {
+  id: string;
+  number: string;
+  title: string;
+  category: string;
+  year: string;
+  description: string;
+  image: string;
+  tags: string[];
+  status: "réalisé" | "à compléter";
+  featured?: boolean;
+};
+
+const projects: Project[] = [
+  {
+    id: "lumiere-parfums",
+    number: "01",
+    title: "Lumière Parfums",
+    category: "E-commerce / direction technique",
+    year: "2026",
+    description:
+      "Une expérience de parfumerie premium pensée de la vitrine jusqu’au socle applicatif : narration produit, panier, espace client, administration et déploiement.",
+    image: ASSETS.lumiere,
+    tags: ["Node.js", "Express", "PostgreSQL", "Cloudinary"],
+    status: "réalisé",
+    featured: true,
+  },
+  // Ajoutez ici les prochaines études de cas en conservant le même format.
 ];
 
-const publicLinks = ["Nos services", "Notre méthode", "Réalisations", "Demander un devis", "Contact"];
-const galleryProjects = [
-  { id: "lumiere", category: "Digital commerce", title: "Lumière Parfums", image: "/manus-storage/project-lumiere-parfums_d5073d5d.jpg", summary: "Une expérience e-commerce premium pour présenter une collection de parfums avec clarté.", details: "Catalogue éditorial, parcours de demande, espace client et base de gestion structurée pour transformer la découverte en conversation commerciale.", deliverables: ["Direction visuelle", "Catalogue responsive", "Parcours client"] },
-  { id: "commerce", category: "Opérations", title: "Commerce connecté", image: "/manus-storage/project-commerce-interface_a71beade.jpg", summary: "Une interface pensée pour rendre les opérations commerciales plus lisibles.", details: "Un système de consultation et de suivi qui rassemble les produits, les commandes et les actions importantes dans un même fil de travail.", deliverables: ["Architecture d’information", "Interface métier", "États et suivi"] },
-  { id: "automation", category: "Organisation", title: "Studio d’automatisation", image: "/manus-storage/project-automation-studio_1ae54e36.jpg", summary: "Des processus documentés pour faire circuler l’information sans perdre le contexte.", details: "Un espace de travail conçu pour clarifier les responsabilités, les étapes et les points de contrôle d’une équipe en mouvement.", deliverables: ["Cartographie des flux", "Système de tâches", "Documentation"] },
+const expertise = [
+  ["01", "Interfaces utiles", "Des parcours lisibles, sensibles et suffisamment robustes pour sortir du prototype."],
+  ["02", "Systèmes fiables", "Une attention égale au frontend, aux données, aux secrets et au déploiement."],
+  ["03", "Présence de marque", "Des détails visuels qui donnent à un produit sa voix, sa mémoire et sa cohérence."],
 ];
 
 export default function Home() {
-  // The useAuth hook provides authentication state.
-  // To implement login/logout, call logout(), or start login from an event
-  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
-  // startLogin() during render (no href={startLogin()}) — it mints a one-time
-  // nonce cookie and must run only at the moment of navigation.
-  let { user, loading, error, isAuthenticated, logout } = useAuth();
-
+  const [activeFilter, setActiveFilter] = useState("Tous");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showAccess, setShowAccess] = useState(false);
-  const [contactState, setContactState] = useState<"idle" | "opening" | "ready">("idle");
-  const [contactValues, setContactValues] = useState({ name: "", email: "", domain: "BTP & construction", message: "" });
-  const [contactErrors, setContactErrors] = useState<Record<string, string>>({});
-  const [galleryFilter, setGalleryFilter] = useState("Toutes");
-  const [selectedProject, setSelectedProject] = useState<(typeof galleryProjects)[number] | null>(null);
-  const { data: publishedServices, isLoading: catalogLoading, error: catalogError } = trpc.catalog.published.useQuery();
-  const [catalog, setCatalog] = useState<ServiceItem[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("Toutes");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [priceSort, setPriceSort] = useState<"default" | "asc" | "desc">("default");
-  const galleryCategories = ["Toutes", ...Array.from(new Set(galleryProjects.map((project) => project.category)))];
-  const filteredProjects = galleryProjects.filter((project) => galleryFilter === "Toutes" || project.category === galleryFilter);
-  useEffect(() => { setCatalog((publishedServices ?? []).map((item) => ({ id: String(item.id), title: item.title, category: item.category, description: item.description, priceLabel: item.priceLabel, publisher: item.publisherName, published: Boolean(item.published), imageUrl: item.imageUrl ?? undefined }))); }, [publishedServices]);
-  const categories = ["Toutes", ...Array.from(new Set(catalog.map((item) => item.category)))];
-  const priceValue = (label: string) => { const digits = label.replace(/[^0-9]/g, ""); return digits ? Number(digits) : null; };
-  const filteredCatalog = catalog.filter((item) => { const matchesCategory = categoryFilter === "Toutes" || item.category === categoryFilter; const query = searchQuery.trim().toLowerCase(); const price = priceValue(item.priceLabel); const min = minPrice ? Number(minPrice) : null; const max = maxPrice ? Number(maxPrice) : null; const matchesPrice = (min === null || (price !== null && price >= min)) && (max === null || (price !== null && price <= max)); return matchesCategory && matchesPrice && (!query || `${item.title} ${item.category} ${item.description}`.toLowerCase().includes(query)); }).sort((a, b) => { if (priceSort === "default") return 0; const aPrice = priceValue(a.priceLabel) ?? Number.POSITIVE_INFINITY; const bPrice = priceValue(b.priceLabel) ?? Number.POSITIVE_INFINITY; return priceSort === "asc" ? aPrice - bPrice : bPrice - aPrice; });
-  const jump = (id: string) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
-  const requestQuote = (service: ServiceItem) => { sessionStorage.setItem("mks-pending-quote", service.id); if (sessionStorage.getItem("mks-client-session") !== "demo") { window.location.href = `/login?mode=register&service=${encodeURIComponent(service.id)}`; return; } window.location.href = `/#client-devis-${service.id}`; };
-  const validateContactField = (name: string, value: string) => { if (name === "name" && value.trim().length < 2) return "Indiquez votre nom complet."; if (name === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Indiquez une adresse e-mail valide."; if (name === "message" && value.trim().length < 12) return "Décrivez votre besoin en au moins 12 caractères."; return ""; };
-  const handleContactChange = (name: string, value: string) => { setContactValues((current) => ({ ...current, [name]: value })); setContactErrors((current) => ({ ...current, [name]: validateContactField(name, value) })); setContactState("idle"); };
-  const submitContact = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); const errors = Object.fromEntries(["name", "email", "message"].map((field) => [field, validateContactField(field, contactValues[field as keyof typeof contactValues])])); setContactErrors(errors); if (Object.values(errors).some(Boolean)) return; setContactState("opening"); const subject = `Contact MKS Service — ${contactValues.name}`; const body = `Nom : ${contactValues.name}\nE-mail : ${contactValues.email}\nDomaine : ${contactValues.domain}\n\nMessage :\n${contactValues.message}`; window.setTimeout(() => { window.location.href = `mailto:mkservicegroupe23@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`; setContactState("ready"); }, 350); };
-  useEffect(() => { if (!selectedProject) return; const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setSelectedProject(null); }; document.addEventListener("keydown", closeOnEscape); document.body.style.overflow = "hidden"; return () => { document.removeEventListener("keydown", closeOnEscape); document.body.style.overflow = ""; }; }, [selectedProject]);
+  const [copied, setCopied] = useState(false);
+  const filters = ["Tous", "Réalisé"];
 
-  return <main className="public-app">
-    <header className="public-header">
-      <a href="#top" className="mks-brand"><span className="mks-mark">MKS</span><span><strong>MKS</strong><small>SERVICE</small></span></a>
-      <button className="public-menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Ouvrir le menu">{menuOpen ? <X /> : <Menu />}</button>
-      <nav className={`public-nav ${menuOpen ? "is-open" : ""}`}>{publicLinks.map((link, index) => <button key={link} onClick={() => jump(["services", "method", "realisations", "quote", "contact"][index])}>{link}</button>)}</nav>
-      <div className="header-actions"><a className="header-login" href="/login">Se connecter</a><a className="header-signup" href="/login?mode=register">S’inscrire <ArrowRight size={15} /></a></div>
-    </header>
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === "Tous") return projects;
+    return projects.filter((project) => project.status === "réalisé");
+  }, [activeFilter]);
 
-    <section className="public-hero" id="top"><div className="hero-rail"><span>MK</span><span>01 / 04</span><span>BENIN · COTONOU</span></div><div className="hero-main"><div className="public-kicker"><span /> MKS SERVICE · SITE OFFICIEL</div><h1>Un même fil<br /><em>pour avancer.</em></h1><p>MKS Service réunit plusieurs expertises pour transformer un besoin concret en action organisée, avec un interlocuteur identifié à chaque étape.</p><div className="hero-buttons"><a className="primary-action" href="#quote">Demander un devis <ArrowRight size={17} /></a><button className="outline-action" onClick={() => setShowAccess(!showAccess)}>Accès espace client <ChevronRight size={16} /></button></div>{showAccess && <div className="access-note"><ShieldCheck size={16} /><span>Les espaces RH, Employé et Admin sont réservés aux comptes autorisés.</span><a href="/login">Se connecter</a></div>}<div className="hero-trust"><span><CheckCircle2 size={15} /> Un interlocuteur identifié</span><span><Clock3 size={15} /> Un suivi à chaque étape</span></div></div><div className="hero-poster"><div className="poster-grid" /><div className="poster-card"><small>FIG. 01 / MKS SERVICE</small><strong>Ensemble,<br /><em>bâtissons<br />l’avenir.</em></strong><span className="poster-line" /><small>Construction · Immobilier · Services</small></div><div className="poster-stamp">MKS<br /><small>23</small></div></div></section>
+  useEffect(() => {
+    const revealItems = document.querySelectorAll<HTMLElement>("[data-reveal]");
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")),
+      { threshold: 0.12 },
+    );
+    revealItems.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
 
-    <section className="public-intro"><div className="section-marker">01 <span /></div><div><div className="public-kicker">Une équipe, plusieurs expertises</div><h2>Le travail bien fait<br /><em>commence par l’écoute.</em></h2></div><p>De la première demande au compte rendu final, nous clarifions les responsabilités et nous gardons le fil. Vous savez qui agit, où en est le projet et quelle est la prochaine étape.</p></section><section className="confidence-strip"><div className="confidence-lead"><span className="public-kicker">Pourquoi MKS Service</span><h2>Du besoin<br /><em>au résultat.</em></h2></div><div className="confidence-item"><strong>01</strong><span>Comprendre</span><p>Nous partons de votre réalité, pas d’une solution toute faite.</p></div><div className="confidence-item"><strong>02</strong><span>Coordonner</span><p>Le bon domaine et le bon interlocuteur sont mobilisés.</p></div><div className="confidence-item"><strong>03</strong><span>Rendre compte</span><p>Chaque étape reste lisible jusqu’à la livraison.</p></div></section>
+  const copyEmail = async () => {
+    await navigator.clipboard?.writeText("sergemetchri@gmail.com");
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  };
 
-    <section className="services-section" id="services"><div className="section-top"><div><div className="public-kicker">02 · Ce que nous faisons</div><h2>Des solutions<br /><em>sur le terrain.</em></h2></div><p>Choisissez le besoin qui vous ressemble. Notre équipe vous orientera vers le bon interlocuteur.</p></div><div className="services-grid">{services.map(({ title, text, icon: Icon, color }) => <article className={`service-card ${color}`} key={title}><div className="service-icon"><Icon size={24} /></div><span className="service-number">0{services.findIndex((service) => service.title === title) + 1}</span><h3>{title}</h3><p>{text}</p><button onClick={() => jump("quote")}>Parler de ce besoin <ArrowRight size={15} /></button></article>)}</div></section>
+  const closeMenu = () => setMenuOpen(false);
 
-    <section className="gallery-section" id="realisations"><div className="section-top"><div><div className="public-kicker">03 · Références de l’entreprise</div><h2>Des projets<br /><em>qui prennent forme.</em></h2></div><p>Quelques références de MKS Service : des solutions concrètes, des espaces mieux organisés et des résultats suivis pour nos clients et partenaires.</p></div><div className="gallery-filters" aria-label="Filtrer les réalisations">{galleryCategories.map((category) => <button type="button" className={galleryFilter === category ? "active" : ""} key={category} onClick={() => setGalleryFilter(category)}>{category}</button>)}</div><div className="gallery-grid">{filteredProjects.map((project, index) => <button type="button" className={`gallery-card ${index === 0 ? "gallery-feature" : ""}`} key={project.id} onClick={() => setSelectedProject(project)} aria-label={`Voir le détail du projet ${project.title}`}><img src={project.image} alt={project.summary} /><div><span>{String(index + 1).padStart(2, "0")} · {project.category.toUpperCase()}</span><h3>{project.title}</h3><p>{project.summary}</p><small>Voir la référence <ArrowRight size={14} /></small></div></button>)}</div></section>{selectedProject && <div className="project-modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) setSelectedProject(null); }}><div className="project-modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title"><button type="button" className="modal-close" onClick={() => setSelectedProject(null)} aria-label="Fermer la fenêtre"><X size={20} /></button><img src={selectedProject.image} alt="" /><div className="project-modal-content"><span className="public-kicker">Référence MKS Service · {selectedProject.category}</span><h2 id="project-modal-title">{selectedProject.title}</h2><p className="modal-summary">{selectedProject.summary}</p><p>{selectedProject.details}</p><div className="modal-deliverables">{selectedProject.deliverables.map((item) => <span key={item}>{item}</span>)}</div><button type="button" className="dark-action" onClick={() => { setSelectedProject(null); jump("quote"); }}>Parler de votre besoin <ArrowRight size={16} /></button></div></div></div>}
+  return (
+    <main className="site-shell">
+      <aside className="side-rail">
+        <a href="#top" className="brand-lockup" aria-label="Retour en haut">
+          <img src={ASSETS.mark} alt="" className="brand-mark" />
+          <span className="brand-name">Metchri<br />/ Studio</span>
+        </a>
+        <span className="rail-index">Portfolio · 2026</span>
+        <a className="rail-email" href="mailto:sergemetchri@gmail.com">sergemetchri@<br />gmail.com</a>
+      </aside>
 
-    <section className="catalog-section" id="catalog"><div className="section-top"><div><div className="public-kicker">02 bis · Prestations disponibles</div><h2>Une offre claire<br /><em>pour chaque besoin.</em></h2></div><p>Explorez les prestations actuellement publiées par nos domaines. Une offre vous intéresse ? Demandez un devis et décrivez votre contexte.</p></div><div className="catalog-toolbar"><label className="catalog-search"><Search size={16} /><span className="sr-only">Rechercher une prestation</span><input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Rechercher une prestation..." /></label>{(searchQuery || categoryFilter !== "Toutes") && <button className="catalog-clear" type="button" onClick={() => { setSearchQuery(""); setCategoryFilter("Toutes"); setMinPrice(""); setMaxPrice(""); setPriceSort("default"); }}>Effacer</button>}<div className="category-filters" aria-label="Filtrer par catégorie">{categories.map((category) => <button type="button" key={category} className={categoryFilter === category ? "active" : ""} onClick={() => setCategoryFilter(category)}>{category}</button>)}</div><div className="price-controls"><label>Prix min<input type="number" min="0" inputMode="numeric" value={minPrice} onChange={(event) => setMinPrice(event.target.value)} placeholder="0" /></label><label>Prix max<input type="number" min="0" inputMode="numeric" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)} placeholder="Illimité" /></label><label>Trier par<select value={priceSort} onChange={(event) => setPriceSort(event.target.value as "default" | "asc" | "desc")}><option value="default">Pertinence</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select></label></div><small className="catalog-result-count">{filteredCatalog.length} prestation{filteredCatalog.length > 1 ? "s" : ""} trouvée{filteredCatalog.length > 1 ? "s" : ""}</small></div><div className="catalog-grid">{catalogLoading ? <div className="catalog-empty">Chargement des prestations publiées...</div> : catalogError ? <div className="catalog-empty">Le catalogue est temporairement indisponible. Réessayez dans quelques instants.</div> : filteredCatalog.map((service) => <article className="catalog-card" key={service.id}>{service.imageUrl && <img className="catalog-card-image" src={service.imageUrl} alt="" />}<div className="catalog-card-top"><span>{service.category}</span><span className="catalog-status">Publié</span></div><h3>{service.title}</h3><p>{service.description}</p><a className="catalog-detail-link" href={`/prestation/${service.id}`}>Voir le détail <ArrowRight size={14} /></a><div className="catalog-card-bottom"><strong>{service.priceLabel}</strong><button onClick={() => requestQuote(service)}>Demander un devis <ArrowRight size={15} /></button></div><small>Publié par {service.publisher}</small></article>)}</div>{!catalogLoading && !catalogError && filteredCatalog.length === 0 && <div className="catalog-empty">Aucune prestation ne correspond à votre recherche. Essayez une autre catégorie ou un autre terme.</div>}</section>
+      <div className="page-content" id="top">
+        <header className="topbar">
+          <a href="#top" className="mobile-brand"><img src={ASSETS.mark} alt="" /> <span>Metchri / Studio</span></a>
+          <nav className={`main-nav ${menuOpen ? "open" : ""}`} aria-label="Navigation principale">
+            <a href="#work" onClick={closeMenu}>Projets <span>01</span></a>
+            <a href="#approach" onClick={closeMenu}>Approche <span>02</span></a>
+            <a href="#contact" onClick={closeMenu}>Contact <span>03</span></a>
+          </nav>
+          <a className="top-availability" href="#contact">Disponible pour un projet <span className="availability-dot" /></a>
+          <button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}>
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </header>
 
-    <section className="method-section" id="method"><div className="method-copy"><div className="public-kicker">03 · Notre méthode</div><h2>Moins de flou.<br /><em>Plus d’avancement.</em></h2><p>Une méthode simple pour des projets qui restent lisibles : comprendre, proposer, organiser, réaliser, rendre compte.</p><a className="text-link" href="#quote">Commencer une discussion <ArrowRight size={15} /></a></div><div className="method-steps">{[["01", "Écouter", "Comprendre le besoin réel."], ["02", "Proposer", "Présenter un devis précis."], ["03", "Organiser", "Affecter les bonnes ressources."], ["04", "Rendre compte", "Documenter le résultat."]].map(([number, title, text]) => <div className="method-step" key={number}><span>{number}</span><div><strong>{title}</strong><p>{text}</p></div></div>)}</div></section>
+        <section className="hero-section" aria-labelledby="hero-title">
+          <div className="hero-copy" data-reveal>
+            <p className="eyebrow"><span className="eyebrow-line" /> METCHRI Jérôme Serge · étudiant MIA 2</p>
+            <h1 id="hero-title">Des interfaces qui<br /><em>savent</em> pourquoi<br />elles existent.</h1>
+            <p className="hero-intro">Je suis METCHRI Jérôme Serge, étudiant en MIA 2 à l’UAC au Bénin. Je conçois et construis des expériences numériques où la direction artistique, la clarté produit et la fiabilité technique avancent ensemble.</p>
+            <a href="#work" className="text-link">Voir les projets <ArrowDownRight size={17} /></a>
+          </div>
+          <div className="hero-visual" data-reveal>
+            <div className="hero-image-wrap">
+              <img src={ASSETS.hero} alt="Bureau de création avec ordinateur, papier et branche de laurier" />
+              <span className="image-note note-top">Fig. 01 / atelier en cours</span>
+              <span className="image-note note-bottom">Concevoir avec intention</span>
+            </div>
+            <div className="hero-stamp"><img src={ASSETS.mark} alt="" /><span>↘</span></div>
+          </div>
+          <div className="hero-footer"><span>Scroll pour explorer</span><span className="scroll-line" /><span>01—04</span></div>
+        </section>
 
-    <section className="quote-section" id="quote"><div className="quote-panel"><div className="public-kicker">04 · Votre projet</div><h2>Donnez-nous<br /><em>le prochain pas.</em></h2><p>Décrivez votre besoin en quelques lignes. Nous vous orienterons vers le domaine et le bon point de contact.</p><form className="contact-form" onSubmit={submitContact} noValidate><div className="contact-fields"><label>Nom complet<input name="name" value={contactValues.name} onChange={(event) => handleContactChange("name", event.target.value)} onBlur={(event) => setContactErrors((current) => ({ ...current, name: validateContactField("name", event.target.value) }))} placeholder="Votre nom" aria-invalid={Boolean(contactErrors.name)} aria-describedby="contact-name-error" />{contactErrors.name && <small className="field-error" id="contact-name-error">{contactErrors.name}</small>}</label><label>E-mail<input name="email" value={contactValues.email} onChange={(event) => handleContactChange("email", event.target.value)} onBlur={(event) => setContactErrors((current) => ({ ...current, email: validateContactField("email", event.target.value) }))} type="email" placeholder="vous@exemple.com" aria-invalid={Boolean(contactErrors.email)} aria-describedby="contact-email-error" />{contactErrors.email && <small className="field-error" id="contact-email-error">{contactErrors.email}</small>}</label></div><label>Domaine<select name="domain" value={contactValues.domain} onChange={(event) => handleContactChange("domain", event.target.value)}><option>BTP & construction</option><option>Immobilier</option><option>Entretien & sécurité</option><option>Autre besoin</option></select></label><label>Votre message<textarea name="message" value={contactValues.message} onChange={(event) => handleContactChange("message", event.target.value)} onBlur={(event) => setContactErrors((current) => ({ ...current, message: validateContactField("message", event.target.value) }))} placeholder="Expliquez votre besoin en quelques lignes" aria-invalid={Boolean(contactErrors.message)} aria-describedby="contact-message-error" />{contactErrors.message && <small className="field-error" id="contact-message-error">{contactErrors.message}</small>}</label><button className={`primary-action light ${contactState === "ready" ? "is-sent" : ""}`} type="submit" disabled={contactState === "opening"}>{contactState === "opening" ? <><span className="button-spinner" /> Préparation du message...</> : contactState === "ready" ? <>Message préparé <CheckCircle2 size={17} /></> : <>Préparer mon message <ArrowRight size={17} /></>}</button>{contactState === "ready" && <small className="contact-feedback">Votre messagerie a été ouverte. Finalisez l’envoi depuis votre application e-mail.</small>}</form></div><div className="quote-aside"><div><Mail size={18} /><span>Courriel</span><a href="mailto:mkservicegroupe23@gmail.com">mkservicegroupe23@gmail.com</a></div><div><Phone size={18} /><span>Téléphone</span><a href="tel:+2290161751053">+229 01 61 75 10 53</a></div><div><FileText size={18} /><span>Espace client</span><a href="/login">Se connecter à son espace</a></div></div></section>
+        <section className="manifesto-section" id="approach" data-reveal>
+          <div className="section-marker"><span>02</span><span className="marker-rule" /></div>
+          <div className="manifesto-content">
+            <p className="eyebrow">Une pratique située entre le code et l’intention</p>
+            <h2>Le bon détail n’est<br /><em>jamais</em> un hasard.</h2>
+          </div>
+          <p className="manifesto-aside">Chaque projet commence par une question simple : quelle expérience doit rester en mémoire lorsque l’écran s’éteint ? La réponse devient une structure, puis une interface.</p>
+        </section>
 
-    <section className="internal-access"><div><div className="public-kicker">Accès professionnel</div><h2>Vous avez déjà<br /><em>un compte MKS ?</em></h2></div><div><p>Connectez-vous pour accéder à votre espace client. Les liens RH, Employé et Admin sont réservés aux comptes autorisés.</p><a className="dark-action" href="/login">Se connecter <ArrowRight size={16} /></a></div></section>
+        <section className="work-section" id="work" aria-labelledby="work-title">
+          <div className="section-heading" data-reveal>
+            <div><p className="eyebrow"><span className="eyebrow-line" /> Sélection de travaux</p><h2 id="work-title">Projets<br /><em>réalisés</em></h2></div>
+            <div className="section-heading-meta"><span>Une archive en mouvement</span><span>01 entrée publiée</span></div>
+          </div>
+          <div className="filter-row" role="tablist" aria-label="Filtrer les projets">
+            {filters.map((filter) => <button key={filter} className={activeFilter === filter ? "filter active" : "filter"} onClick={() => setActiveFilter(filter)} role="tab" aria-selected={activeFilter === filter}>{filter}</button>)}
+          </div>
+          <div className="project-list">
+            {filteredProjects.map((project, index) => (
+              <article className={`project-row ${project.featured ? "featured" : ""}`} key={project.id} data-reveal style={{ "--delay": `${index * 70}ms` } as React.CSSProperties}>
+                <div className="project-number">{project.number}</div>
+                <div className="project-image-wrap"><img src={project.image} alt={`Aperçu éditorial du projet ${project.title}`} /><span className={`project-status ${project.status === "réalisé" ? "status-done" : "status-pending"}`}>{project.status}</span></div>
+                <div className="project-info">
+                  <div className="project-title-line"><h3>{project.title}</h3><span className="project-year">{project.year}</span></div>
+                  <p className="project-category">{project.category}</p>
+                  <p className="project-description">{project.description}</p>
+                  <div className="project-tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+                </div>
+                <a className="project-arrow" href={project.featured ? "#lumiere-detail" : "#contact"} aria-label={project.featured ? `Voir les détails de ${project.title}` : "Proposer un projet"}><ArrowUpRight size={22} /></a>
+              </article>
+            ))}
+          </div>
+        </section>
 
-    <footer className="public-footer" id="contact"><div className="mks-brand"><span className="mks-mark">MKS</span><span><strong>MKS</strong><small>SERVICE</small></span></div><div className="footer-promise"><span>Ensemble, bâtissons l’avenir.</span><small>Prestations · Coordination · Suivi</small></div><div className="footer-company"><span className="footer-label">INFORMATIONS DE L’ENTREPRISE</span><strong>MKS SERVICE</strong><span>Bénin · Cotonou</span></div><div className="footer-contact"><span className="footer-label">CONTACT OFFICIEL</span><a href="tel:+2290161751053">+229 01 61 75 10 53</a><a href="mailto:mkservicegroupe23@gmail.com">mkservicegroupe23@gmail.com</a><a className="footer-legal-link" href="/mentions-legales">Mentions légales <ArrowRight size={13} /></a></div></footer>
-  </main>;
+        <section className="detail-section" id="lumiere-detail" data-reveal>
+          <div className="detail-kicker"><span>01</span><span className="marker-rule" /><span>Étude de cas sélectionnée</span></div>
+          <div className="detail-grid">
+            <div className="detail-heading"><p className="eyebrow">Lumière Parfums · 2026</p><h2>Donner une<br /><em>présence</em> au produit.</h2></div>
+            <div className="detail-copy"><p>Un projet e-commerce premium où la direction visuelle ne s’arrête pas à la vitrine. J’ai travaillé l’expérience comme un ensemble cohérent : récit de marque, catalogue, parcours d’achat, administration et infrastructure.</p><a href="#contact" className="text-link">Parler du projet <ArrowUpRight size={17} /></a></div>
+          </div>
+          <div className="detail-facts"><div><span>Rôle</span><strong>Conception · développement · sécurité</strong></div><div><span>Socle</span><strong>Node.js · PostgreSQL · Cloudinary</strong></div><div><span>État</span><strong className="fact-green"><Check size={15} /> Fonctionnel en local</strong></div></div>
+          <div className="proof-strip" aria-label="Preuves de réalisation"><div><span>01 · Parcours</span><strong>Catalogue → panier → commande</strong></div><div><span>02 · Système</span><strong>API Express et schéma PostgreSQL</strong></div><div><span>03 · Exploitation</span><strong>Admin, sécurité et déploiement</strong></div></div>
+        </section>
+
+        <section className="expertise-section" aria-labelledby="expertise-title" data-reveal>
+          <div className="section-marker"><span>03</span><span className="marker-rule" /></div>
+          <div className="expertise-heading"><p className="eyebrow">Ce que j’apporte</p><h2 id="expertise-title">Construire avec<br /><em>justesse.</em></h2></div>
+          <div className="expertise-list">{expertise.map(([number, title, body]) => <div className="expertise-item" key={number}><span className="expertise-number">{number}</span><div><h3>{title}</h3><p>{body}</p></div><ArrowUpRight size={18} /></div>)}</div>
+        </section>
+
+        <section className="contact-section" id="contact" data-reveal>
+          <div className="contact-top"><p className="eyebrow"><span className="eyebrow-line" /> Parlons de la suite</p><span className="contact-counter">04—04</span></div>
+          <h2>Un projet à<br /><em>mettre au monde ?</em></h2>
+          <p className="contact-intro">Un produit, une refonte ou une idée encore en notes. Écrivez-moi ce que vous cherchez à rendre plus clair, plus beau ou plus fiable. Je suis joignable par e-mail ou sur WhatsApp.</p>
+          <div className="contact-actions"><a className="contact-button" href="mailto:sergemetchri@gmail.com">Écrire un message <Mail size={17} /></a><a className="whatsapp-button" href="https://wa.me/2290195162664" target="_blank" rel="noreferrer">WhatsApp · 0195162664 <ExternalLink size={16} /></a><button className="copy-button" onClick={copyEmail}>{copied ? <><Check size={16} /> Adresse copiée</> : <><Copy size={16} /> Copier l’adresse</>}</button></div>
+        </section>
+
+        <footer className="site-footer"><span>© 2026 — METCHRI Jérôme Serge</span><span>Conçu et construit avec attention</span><a href="#top">Retour en haut <ArrowUpRight size={14} /></a></footer>
+      </div>
+    </main>
+  );
 }
